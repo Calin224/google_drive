@@ -1,25 +1,23 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ItemService } from '../../core/services/item.service';
-import { Item } from '../../shared/models/item';
-import { MatButtonModule } from '@angular/material/button';
+import {Component, inject, OnInit} from '@angular/core';
+import {ItemService} from '../../core/services/item.service';
+import {Item} from '../../shared/models/item';
+import {MatButtonModule} from '@angular/material/button';
 import {
   MatCard, MatCardActions,
-  MatCardContent,
   MatCardHeader,
-  MatCardImage,
   MatCardSubtitle,
   MatCardTitle
 } from '@angular/material/card';
 import {MatIcon} from '@angular/material/icon';
 import {RouterLink} from '@angular/router';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {CreateItemComponent} from '../../shared/dialogs/create-item/create-item.component';
 import {ItemParams} from '../../shared/models/itemParams';
 import {Pagination} from '../../shared/models/pagination';
+import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import {MatMenuModule} from '@angular/material/menu';
+import {FiltersDialogComponent} from '../../shared/dialogs/filters-dialog/filters-dialog.component';
 
 @Component({
   selector: 'app-items',
@@ -33,29 +31,37 @@ import {Pagination} from '../../shared/models/pagination';
     MatIcon,
     RouterLink,
     ReactiveFormsModule,
+    MatPaginatorModule,
+    MatMenuModule,
+    FormsModule,
   ],
   templateUrl: './items.component.html',
   styleUrl: './items.component.scss'
 })
 export class ItemsComponent implements OnInit {
-  private itemService = inject(ItemService);
+  itemService = inject(ItemService);
   items?: Pagination<Item>;
   readonly dialog = inject(MatDialog);
 
   itemParams = new ItemParams();
 
   ngOnInit(): void {
+    this.initializeItems();
+  }
+
+  initializeItems(){
+    this.itemService.getCategories();
     this.loadItems();
   }
 
-  loadItems(){
+  loadItems() {
     this.itemService.getItems(this.itemParams).subscribe({
       next: items => this.items = items,
       error: error => console.log(error)
     });
   }
 
-  deleteItem(id: number){
+  deleteItem(id: number) {
     this.itemService.deleteItem(id).subscribe({
       next: () => this.loadItems(),
       error: error => console.log(error)
@@ -64,5 +70,29 @@ export class ItemsComponent implements OnInit {
 
   openDialog() {
     const dialogRef = this.dialog.open(CreateItemComponent);
+  }
+
+  openFiltersDialog(){
+    const dialogRef = this.dialog.open(FiltersDialogComponent, {
+      minWidth: '500px',
+      data: {
+        selectedCategories: this.itemParams.categories
+      }
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: res => {
+        if(res){
+          this.itemParams.categories = res.selectedCategories;
+          this.loadItems();
+        }
+      }
+    })
+  }
+
+  handlePageEvent($event: PageEvent) {
+    this.itemParams.pageNumber = $event.pageIndex + 1;
+    this.itemParams.pageSize = $event.pageSize;
+    this.loadItems();
   }
 }

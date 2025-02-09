@@ -17,6 +17,7 @@ namespace Core.Specification
         public int Take { get; private set; }
         public int Skip { get; private set;  }
         public bool IsPagingEnabled { get; private set;  }
+        public bool IsDistinct { get; private set; }
 
         public IQueryable<T> ApplyCriteria(IQueryable<T> query)
         {
@@ -43,6 +44,11 @@ namespace Core.Specification
             Skip = skip;
             Take = take;
             IsPagingEnabled = true;
+        }
+
+        protected void AddDistinct()
+        {
+            IsDistinct = true;
         }
     }
 

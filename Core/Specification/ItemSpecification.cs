@@ -9,7 +9,7 @@ namespace Core.Specification
 {
     public class ItemSpecification : BaseSpecification<Item>
     {
-        public ItemSpecification(ItemSpecParams specParams) : base(null)
+        public ItemSpecification(ItemSpecParams specParams) : base(x => !specParams.Categories.Any() || specParams.Categories.Contains(x.Category))
         {
             AddInclude(x => x.Photos);
             ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);

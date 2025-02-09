@@ -12,6 +12,7 @@ namespace Core.Specification
         public CategorySpecification()
         {
             AddSelect(x => x.Category);
+            AddDistinct();
         }
     }
 }
