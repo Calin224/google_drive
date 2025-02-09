@@ -3,7 +3,7 @@
 </div>
 
 <div class="grid grid-cols-4 gap-4">
-  @for (item of items; track item.id) {
+  @for (item of items?.data; track item.id) {
     <mat-card appearance="outlined" routerLink="/item/{{item.id}}">
       <mat-card-header class="pb-4">
         <mat-card-title>{{ item.name }}</mat-card-title>

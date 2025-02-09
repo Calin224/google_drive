@@ -9,9 +9,10 @@ namespace Core.Specification
 {
     public class ItemSpecification : BaseSpecification<Item>
     {
-        public ItemSpecification() : base(null)
+        public ItemSpecification(ItemSpecParams specParams) : base(null)
         {
             AddInclude(x => x.Photos);
+            ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
         }
 
         public ItemSpecification(int id) : base(x => x.Id == id)

@@ -7,12 +7,12 @@ using Microsoft.Identity.Client;
 
 namespace API.Controllers
 {
-    public class ItemsController(IGenericRepository<Item> repo, IPhotoService photoService) : BaseApiController
+    public class ItemsController(IGenericRepository<Item> repo) : BaseApiController
     {
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Item>>> GetItems([FromQuery]ItemSpecParams specParams)
         {
-            var spec = new ItemSpecification();
+            var spec = new ItemSpecification(specParams);
             return await CreatePagedResult(repo, spec, specParams.PageIndex, specParams.PageSize);
         }
 

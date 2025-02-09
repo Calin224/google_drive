@@ -14,6 +14,10 @@ namespace Core.Specification
         public Expression<Func<T, bool>>? Criteria => criteria;
         public List<Expression<Func<T, object>>> Includes { get; } = [];
         public List<string> IncludeStrings { get; set; } = [];
+        public int Take { get; private set; }
+        public int Skip { get; private set;  }
+        public bool IsPagingEnabled { get; private set;  }
+
         public IQueryable<T> ApplyCriteria(IQueryable<T> query)
         {
             if (criteria != null)
@@ -32,6 +36,13 @@ namespace Core.Specification
         protected void AddInclude(string includeString)
         {
             IncludeStrings.Add(includeString);
+        }
+
+        protected void ApplyPaging(int skip, int take)
+        {
+            Skip = skip;
+            Take = take;
+            IsPagingEnabled = true;
         }
     }
 

@@ -1,7 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Item } from '../../shared/models/item';
+import {ItemParams} from '../../shared/models/itemParams';
+import {Pagination} from '../../shared/models/pagination';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,13 @@ export class ItemService {
   baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
-  getItems(){
-    return this.http.get<Item[]>(this.baseUrl + 'items');
+  getItems(itemParams: ItemParams){
+    let params = new HttpParams();
+
+    params = params.append('pageSize', itemParams.pageSize);
+    params = params.append('pageIndex', itemParams.pageNumber);
+
+    return this.http.get<Pagination<Item>>(this.baseUrl + 'items', {params});
   }
 
   getItem(id: number){

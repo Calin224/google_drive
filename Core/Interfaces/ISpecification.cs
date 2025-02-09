@@ -12,6 +12,9 @@ namespace Core.Interfaces
         Expression<Func<T, bool>>? Criteria { get; }
         List<Expression<Func<T, object>>> Includes { get; }
         List<string> IncludeStrings { get; set; }
+        public int Take { get; }
+        public int Skip { get; }
+        public bool IsPagingEnabled { get; }
         IQueryable<T> ApplyCriteria(IQueryable<T> query);
     }
 

@@ -18,6 +18,8 @@ import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import {MatDialog} from '@angular/material/dialog';
 import {CreateItemComponent} from '../../shared/dialogs/create-item/create-item.component';
+import {ItemParams} from '../../shared/models/itemParams';
+import {Pagination} from '../../shared/models/pagination';
 
 @Component({
   selector: 'app-items',
@@ -37,15 +39,17 @@ import {CreateItemComponent} from '../../shared/dialogs/create-item/create-item.
 })
 export class ItemsComponent implements OnInit {
   private itemService = inject(ItemService);
-  items: Item[] = [];
+  items?: Pagination<Item>;
   readonly dialog = inject(MatDialog);
+
+  itemParams = new ItemParams();
 
   ngOnInit(): void {
     this.loadItems();
   }
 
   loadItems(){
-    this.itemService.getItems().subscribe({
+    this.itemService.getItems(this.itemParams).subscribe({
       next: items => this.items = items,
       error: error => console.log(error)
     });
