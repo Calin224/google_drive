@@ -1,0 +1,30 @@
+<div>
+  <button mat-raised-button (click)="openDialog()">Pick one</button>
+</div>
+
+<div class="grid grid-cols-4 gap-4">
+  @for (item of items; track item.id) {
+    <mat-card appearance="outlined" routerLink="/item/{{item.id}}">
+      <mat-card-header class="pb-4">
+        <mat-card-title>{{ item.name }}</mat-card-title>
+        <mat-card-subtitle>{{ item.category }}</mat-card-subtitle>
+      </mat-card-header>
+<!--      <mat-card-content>-->
+<!--        <p>{{ item.description }}</p>-->
+<!--      </mat-card-content>-->
+      <mat-card-actions (click)="$event.stopPropagation()">
+        <button mat-icon-button (click)="deleteItem(item.id)" >
+          <mat-icon color="warn">
+            delete
+          </mat-icon>
+        </button>
+
+        <button mat-icon-button>
+          <mat-icon color="warn">
+            favorite
+          </mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>
