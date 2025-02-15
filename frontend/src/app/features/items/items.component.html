@@ -1,0 +1,48 @@
+@if (items) {
+  <div class="flex justify-between items-center mb-5">
+    <button mat-raised-button (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+      Add Thread
+    </button>
+    <div class="flex flex-wrap justify-between items-center gap-4 bg-[#101414] px-4 py-2 rounded-xl">
+      <mat-paginator
+        [length]="items.count"
+        [pageSize]="items.pageSize"
+        [pageSizeOptions]="[5,10,15,20]"
+        [pageIndex]="itemParams.pageNumber - 1"
+        [showFirstLastButtons]="true"
+        (page)="handlePageEvent($event)"
+      >
+      </mat-paginator>
+
+
+    </div>
+    <button mat-flat-button (click)="openFiltersDialog()">
+      <mat-icon>filter_list</mat-icon>
+      Filters
+    </button>
+  </div>
+
+  <div class="grid grid-cols-5 gap-4">
+    @for (item of items?.data; track item.id) {
+      <mat-card appearance="outlined" routerLink="/item/{{item.id}}" class="cursor-pointer hover:bg-gray-900 transition-all duration-300 ease-in-out">
+        <mat-card-header class="pb-4">
+          <mat-card-title>{{ item.name }}</mat-card-title>
+          <mat-card-subtitle>{{ item.category }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions (click)="$event.stopPropagation()">
+          <button mat-icon-button (click)="deleteItem(item.id)">
+            <mat-icon color="warn">
+              delete
+            </mat-icon>
+          </button>
+          <button mat-icon-button>
+            <mat-icon color="warn">
+              favorite
+            </mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+}

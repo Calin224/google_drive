@@ -1,0 +1,47 @@
+<div class="shadow-gray-300 shadow-inner rounded-xl">
+  <mat-card class="relative">
+    <mat-card-content class="mb-20">
+      <div class="text-center text-[2rem] font-bold mb-5">Register</div>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" class="m-6">
+        <mat-form-field appearance="fill" class="w-full mb-4">
+          <mat-label>First Name</mat-label>
+          <input type="text" placeholder="First Name" matInput formControlName="firstName">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full mb-4">
+          <mat-label>Last Name</mat-label>
+          <input type="text" placeholder="Last Name" matInput formControlName="lastName">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full mb-4">
+          <mat-label>Email</mat-label>
+          <input type="email" placeholder="Email" matInput formControlName="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full mb-4">
+          <mat-label>Password</mat-label>
+          <input type="password" placeholder="Password" matInput formControlName="password">
+        </mat-form-field>
+
+        @if (validationErrors.length > 0) {
+          <div class="text-red-500 text-sm">
+            @for (error of validationErrors; track error) {
+              <div>{{error}}</div>
+            }
+          </div>
+        }
+
+        <button type="submit" mat-flat-button [disabled]="!registerForm.valid">Submit</button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="absolute right-5 bottom-2 ">
+      <button mat-stroked-button routerLink="/"
+              class="opacity-50 hover:opacity-100 transition-all duration-300 ease-in-out">
+        Cancel
+      </button>
+    </mat-card-actions>
+
+  </mat-card>
+</div>

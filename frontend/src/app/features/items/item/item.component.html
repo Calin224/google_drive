@@ -1,0 +1,19 @@
+@if(item){
+  <p>{{ item.name }}</p>
+
+  @for (photo of item.photos; track $index) {
+    <img src="{{ photo.url }}" alt="" />
+  }
+
+  <mat-card class="max-w-xl mx-auto">
+    <div>
+      <kendo-upload
+        [saveUrl]="'saveUrl'"
+        [removeUrl]="'removeUrl'"
+        [autoUpload]="false"
+        (select)="onUpload($event)"
+      >
+      </kendo-upload>
+    </div>
+  </mat-card>
+}

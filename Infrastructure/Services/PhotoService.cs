@@ -18,26 +18,33 @@ namespace Infrastructure.Services
             _cloudinary = new Cloudinary(acc);
         }
 
-        public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
+        public async Task<List<ImageUploadResult>> AddPhotosAsync(List<IFormFile> files)
         {
-            var uploadResult = new ImageUploadResult();
+            var uploadResults = new List<ImageUploadResult>();
 
-            if (file.Length > 0)
+            foreach (var file in files)
             {
-                using var stream = file.OpenReadStream();
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face"),
-                    Folder = "da-net9"
-                };
+                var uploadResult = new ImageUploadResult();
 
-                uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                if (file.Length > 0)
+                {
+                    using var stream = file.OpenReadStream();
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(file.FileName, stream),
+                        Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face"),
+                        Folder = "da-net9"
+                    };
+
+                    uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                }
+
+                uploadResults.Add(uploadResult);
             }
 
-            return uploadResult;
+            return uploadResults;
         }
-
+        
         public async Task<DeletionResult> DeletePhotoAsync(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);

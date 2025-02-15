@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.Specification
+﻿namespace Core.Specification
 {
     public class ItemSpecParams
     {
         private const int MaxPageSize = 50;
 
-        private int _pageSize = 6;
+        private int _pageSize = 5;
         public int PageIndex { get; set; } = 1;
 
         public int PageSize
@@ -30,5 +22,7 @@ namespace Core.Specification
             get => _categories;
             set => _categories = value.SelectMany(x => x.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
         }
+
+        public string? appUserId { get; set; }
     }
 }

@@ -5,9 +5,12 @@ namespace API.DTOs
 {
     public class ItemDto
     {
-        [Required] public string Name { get; set; } = string.Empty;
-
-        [Required] public string Description { get; set; } = string.Empty;
-        [Required] public string Category { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Category { get; set; }
+        public List<PhotoDto>? Photos { get; set; }
+        public string AppUserId { get; set; }
+        public AppUserDto? AppUser { get; set; }
     }
 }

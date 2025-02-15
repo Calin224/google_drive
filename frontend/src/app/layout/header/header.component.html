@@ -1,0 +1,29 @@
+<header class="border-b border-b-gray-700 shadow-md p-3 w-full max-h-20 z-50 bg-gray-900">
+  <div class="flex align-middle items-center justify-between max-w-screen-xl mx-auto">
+    <h1 class="text-3xl font-bold">SMS</h1>
+
+    <div class="uppercase font-bold">
+      <a routerLink='/'> Home </a>
+    </div>
+
+    <div class="flex items-center gap-3 my-2 uppercase">
+      @if (accountService.currentUser()) {
+        <button mat-button [matMenuTriggerFor]="menu">
+          <mat-icon>arrow_drop_down</mat-icon>
+          <span>{{ accountService.currentUser()?.email }}</span>
+        </button>
+      } @else {
+        <div>
+          <div class="flex justify-between gap-3">
+            <button mat-button routerLink="/account/login">Login</button>
+            <button mat-flat-button routerLink="/account/register">Register</button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</header>
+
+<mat-menu #menu="matMenu" class="px-5">
+  <button mat-menu-item class="px-3" (click)="logout()">Logout</button>
+</mat-menu>

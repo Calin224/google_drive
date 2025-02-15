@@ -1,17 +1,15 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.Entities;
+﻿using Core.Entities;
 
 namespace Core.Specification
 {
     public class ItemSpecification : BaseSpecification<Item>
     {
-        public ItemSpecification(ItemSpecParams specParams) : base(x => !specParams.Categories.Any() || specParams.Categories.Contains(x.Category))
+        public ItemSpecification(ItemSpecParams specParams)
+            : base(x =>
+                (!specParams.Categories.Any() || specParams.Categories.Contains(x.Category)) &&
+                (string.IsNullOrEmpty(specParams.appUserId) || x.AppUserId == specParams.appUserId))
         {
-            AddInclude(x => x.Photos);
+            // AddInclude(x => x.Photos);
             ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
         }
 

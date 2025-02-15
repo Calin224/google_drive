@@ -8,21 +8,32 @@ namespace API.Controllers
     public class PhotoController(IPhotoService photoService, IGenericRepository<Item> repo) : BaseApiController
     {
         [HttpPost("{id:int}")]
-        public async Task<ActionResult<Item>> AddPhoto(int id, IFormFile file)
+        public async Task<ActionResult<Item>> AddPhoto(int id, [FromForm] List<IFormFile> files)
         {
             var item = await repo.GetByIdAsync(id);
-            if (item == null) return NotFound();
-            var result = await photoService.AddPhotoAsync(file);
-            if (result.Error != null) return BadRequest(result.Error.Message);
-            var photo = new Photo
+            if (item == null) return NotFound("Item not found");
+
+            var results = await photoService.AddPhotosAsync(files);
+            var photos = new List<Photo>();
+
+            foreach (var result in results)
             {
-                Url = result.SecureUrl.AbsoluteUri,
-                PublicId = result.PublicId,
-                ItemId = id
-            };
-            item.Photos.Add(photo);
-            if (await repo.SaveAllAsync()) return Ok();
-            return BadRequest("Photo cannot be added");
+                if (result.Error != null) return BadRequest(result.Error.Message);
+
+                var photo = new Photo
+                {
+                    Url = result.SecureUrl.AbsoluteUri,
+                    PublicId = result.PublicId,
+                    ItemId = id
+                };
+                photos.Add(photo);
+            }
+
+            item.Photos.AddRange(photos);
+
+            if (await repo.SaveAllAsync()) return Ok(photos);
+
+            return BadRequest("Photos could not be added");
         }
 
         [HttpDelete("{itemId:int}/{photoId:int}")]
