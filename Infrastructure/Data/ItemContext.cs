@@ -25,6 +25,13 @@ namespace Infrastructure.Data
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
 
+            modelBuilder.Entity<Item>()
+                .HasMany(e => e.Pdfs)
+                .WithOne(e => e.Item)
+                .HasForeignKey(e => e.ItemId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
+
             // modelBuilder.Entity<Item>()
             //     .HasOne(i => i.AppUser)
             //     .WithMany(u => u.Items)

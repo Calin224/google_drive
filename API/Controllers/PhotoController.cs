@@ -55,7 +55,7 @@ namespace API.Controllers
             }
 
             item.Photos.Remove(photo);
-            if (await repo.SaveAllAsync()) return Ok();
+            if (await repo.SaveAllAsync()) return NoContent();
 
             return BadRequest("Problem deleting the photo");
         }

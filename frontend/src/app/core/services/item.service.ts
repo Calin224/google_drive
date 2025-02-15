@@ -17,7 +17,7 @@ export class ItemService {
 
   getItems(itemParams: ItemParams) {
     let params = new HttpParams();
-
+    
     params = params.append('pageSize', itemParams.pageSize);
     params = params.append('pageIndex', itemParams.pageNumber);
 
@@ -39,17 +39,7 @@ export class ItemService {
   }
 
   createItem(item: Partial<Item>) {
-    const user = this.accountService.currentUser();
-
-    if(!user){
-      throw new Error('User not found');
-    }
-
-    const newItem: Partial<Item> = {
-      ...item,
-    }
-
-    return this.http.post<Item>(this.baseUrl + 'items', newItem);
+    return this.http.post<Item>(this.baseUrl + 'items', item);
   }
 
   deleteItem(id: number) {

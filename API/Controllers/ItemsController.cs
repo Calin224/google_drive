@@ -14,7 +14,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Item>>> GetItems([FromQuery] ItemSpecParams specParams)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return Unauthorized("User not found");
 
             specParams.appUserId = userId;
@@ -38,7 +38,7 @@ namespace API.Controllers
             
             if(!res.Succeeded) return BadRequest("Item cannot be added");
 
-            return Ok(user.Items);
+            return Ok(item);
         }
 
         [HttpGet("{id:int}")]
@@ -53,7 +53,10 @@ namespace API.Controllers
         [HttpGet("categories")]
         public async Task<ActionResult<IReadOnlyList<string>>> GetCategories()
         {
-            var spec = new CategorySpecification();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId == null) return Unauthorized();
+
+            var spec = new CategorySpecification(userId);
             var categories = await repo.ListAsync(spec);
             return Ok(categories);
         }

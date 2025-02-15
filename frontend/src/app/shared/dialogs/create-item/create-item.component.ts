@@ -28,7 +28,6 @@ export class CreateItemComponent {
   private router = inject(Router);
   private dialogRef = inject(MatDialogRef<CreateItemComponent>);
   private accountService = inject(AccountService);
-  // private snackbarService = inject(SnackbarService);
 
   createItemForm = this.fb.group({
     name: ['', Validators.required],

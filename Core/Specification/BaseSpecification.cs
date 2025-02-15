@@ -9,6 +9,7 @@ using Core.Interfaces;
 namespace Core.Specification
 {
     public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecification<T>
+        
     {
         public BaseSpecification() : this(null) { }
         public Expression<Func<T, bool>>? Criteria => criteria;
@@ -28,7 +29,6 @@ namespace Core.Specification
 
             return query;
         }
-
         protected void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             Includes.Add(includeExpression);

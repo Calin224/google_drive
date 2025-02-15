@@ -24,7 +24,7 @@
   </div>
 
   <div class="grid grid-cols-5 gap-4">
-    @for (item of items?.data; track item.id) {
+    @for (item of items.data; track item.id) {
       <mat-card appearance="outlined" routerLink="/item/{{item.id}}" class="cursor-pointer hover:bg-gray-900 transition-all duration-300 ease-in-out">
         <mat-card-header class="pb-4">
           <mat-card-title>{{ item.name }}</mat-card-title>

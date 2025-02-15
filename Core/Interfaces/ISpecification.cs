@@ -17,6 +17,7 @@ namespace Core.Interfaces
         public bool IsPagingEnabled { get; }
         public bool IsDistinct { get; }
         IQueryable<T> ApplyCriteria(IQueryable<T> query);
+        // IQueryable<T> ApplyUserCriteria(IQueryable<T> query, string userId);
     }
 
     public interface ISpecification<T, TResult> : ISpecification<T>

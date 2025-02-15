@@ -14,5 +14,11 @@ namespace Core.Specification
             AddSelect(x => x.Category);
             AddDistinct();
         }
+
+        public CategorySpecification(string appUserId) : base(x => x.AppUserId == appUserId)
+        {
+            AddSelect(x => x.Category);
+            AddDistinct();
+        }
     }
 }

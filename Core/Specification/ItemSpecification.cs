@@ -16,6 +16,7 @@ namespace Core.Specification
         public ItemSpecification(int id) : base(x => x.Id == id)
         {
             AddInclude(x => x.Photos);
+            AddInclude(x => x.Pdfs);
         }
     }
 }

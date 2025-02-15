@@ -1,19 +1,35 @@
-@if(item){
+@if (item) {
   <p>{{ item.name }}</p>
 
-  @for (photo of item.photos; track $index) {
-    <img src="{{ photo.url }}" alt="" />
-  }
+  <button mat-flat-button (click)="openAddComponentDialog()">
+    <mat-icon>add</mat-icon>
+    Add images
+  </button>
 
-  <mat-card class="max-w-xl mx-auto">
-    <div>
-      <kendo-upload
-        [saveUrl]="'saveUrl'"
-        [removeUrl]="'removeUrl'"
-        [autoUpload]="false"
-        (select)="onUpload($event)"
-      >
-      </kendo-upload>
-    </div>
-  </mat-card>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 ">
+    @for (photo of item.photos; track $index) {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <img mat-card-image src="{{ photo.url }}"/>
+        </mat-card-header>
+
+        <mat-card-actions>
+          <button mat-icon-button (click)="deletePhoto(photo.id)">
+            <mat-icon class="text-red-300"> delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+
+  <!--<mat-card class="max-w-xl mx-auto">-->
+    <!--  <div>-->
+    <!--    <kendo-upload-->
+    <!--      [saveUrl]="'saveUrl'"-->
+    <!--      (upload)="onUpload($event)"-->
+    <!--      [multiple]="true"-->
+    <!--    >-->
+    <!--    </kendo-upload>-->
+    <!--  </div>-->
+    <!--</mat-card>-->
 }
