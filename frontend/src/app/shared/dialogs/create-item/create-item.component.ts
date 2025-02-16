@@ -7,17 +7,22 @@ import {MatInput} from '@angular/material/input';
 import {ItemService} from '../../../core/services/item.service';
 import {Router} from '@angular/router';
 import { AccountService } from '../../../core/services/account.service';
+import {FloatLabel} from 'primeng/floatlabel';
+import {InputText} from 'primeng/inputtext';
+import {Password} from 'primeng/password';
+import {Button, ButtonDirective, ButtonIcon} from 'primeng/button';
+import {Ripple} from 'primeng/ripple';
+import {Card} from 'primeng/card';
 
 @Component({
   selector: 'app-create-item',
   imports: [
-    MatDialogContent,
-    MatFormField,
-    MatDialogActions,
-    MatButton,
-    MatInput,
-    MatLabel,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FloatLabel,
+    InputText,
+    Ripple,
+    Card,
+    ButtonDirective
   ],
   templateUrl: './create-item.component.html',
   styleUrl: './create-item.component.scss'
@@ -26,7 +31,7 @@ export class CreateItemComponent {
   private fb = inject(FormBuilder);
   private itemService = inject(ItemService);
   private router = inject(Router);
-  private dialogRef = inject(MatDialogRef<CreateItemComponent>);
+  protected dialogRef = inject(MatDialogRef<CreateItemComponent>);
   private accountService = inject(AccountService);
 
   createItemForm = this.fb.group({
@@ -38,7 +43,6 @@ export class CreateItemComponent {
   onSubmit(){
     if (this.createItemForm.valid) {
       const formValues = this.createItemForm.value;
-      const user = this.accountService.currentUser();
       const item = {
         name: formValues.name!,
         description: formValues.description!,

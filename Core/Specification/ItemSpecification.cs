@@ -17,6 +17,7 @@ namespace Core.Specification
         {
             AddInclude(x => x.Photos);
             AddInclude(x => x.Pdfs);
+            AddInclude(x => x.Pdfs);
         }
     }
 }

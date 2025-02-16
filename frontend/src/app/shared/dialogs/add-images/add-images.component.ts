@@ -1,14 +1,12 @@
 import {Component, inject, Input} from '@angular/core';
 import {PhotoService} from '../../../core/services/photo.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {UploadComponent} from '@progress/kendo-angular-upload';
 import {Router} from '@angular/router';
 import {MatCard} from '@angular/material/card';
 
 @Component({
   selector: 'app-add-images',
   imports: [
-    UploadComponent,
     MatCard
   ],
   templateUrl: './add-images.component.html',
@@ -22,17 +20,17 @@ export class AddImagesComponent {
 
   itemId: number = this.data.itemId;
 
-  onUpload(event: any) {
-    if (!this.itemId) return;
-    const files: FileList = event.files.map((f: any) => f.rawFile);
-
-    if (files.length > 0) {
-      this.photoService.addPhotos(this.itemId, files).subscribe({
-        next: _ => {
-          this.router.navigateByUrl("/item/" + this.itemId);
-          this.dialogRef.close();
-        }
-      });
-    }
-  }
+  // onUpload(event: any) {
+  //   if (!this.itemId) return;
+  //   const files: FileList = event.files.map((f: any) => f.rawFile);
+  //
+  //   if (files.length > 0) {
+  //     this.photoService.addPhotos(this.itemId, files).subscribe({
+  //       next: _ => {
+  //         this.router.navigateByUrl("/item/" + this.itemId);
+  //         this.dialogRef.close();
+  //       }
+  //     });
+  //   }
+  // }
 }

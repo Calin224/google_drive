@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import {Item} from '../../shared/models/item';
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +9,11 @@ export class PhotoService {
   baseUrl = 'https://localhost:7207/api/';
   private http = inject(HttpClient);
 
-  addPhotos(itemId: number, files: FileList) {
+  addPhotos(itemId: number, files: File[]) {
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-    return this.http.post(this.baseUrl + 'photo/' + itemId, formData);
+    files.forEach(file => formData.append('files', file));
+
+    return this.http.post<Item>(`${this.baseUrl}photo/${itemId}`, formData);
   }
 
   deletePhoto(itemId: number, photoId: number) {

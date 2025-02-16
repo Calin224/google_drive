@@ -31,7 +31,7 @@ namespace API.Controllers
 
             item.Photos.AddRange(photos);
 
-            if (await repo.SaveAllAsync()) return Ok(photos);
+            if (await repo.SaveAllAsync()) return Ok(item);
 
             return BadRequest("Photos could not be added");
         }

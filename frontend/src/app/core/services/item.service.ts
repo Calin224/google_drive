@@ -4,7 +4,7 @@ import { ItemParams } from '../../shared/models/itemParams';
 import { Pagination } from '../../shared/models/pagination';
 import { Item } from '../../shared/models/item';
 import { AccountService } from './account.service';
-import { map } from 'rxjs';
+import {map, of, tap} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class ItemService {
 
   getItems(itemParams: ItemParams) {
     let params = new HttpParams();
-    
+
     params = params.append('pageSize', itemParams.pageSize);
     params = params.append('pageIndex', itemParams.pageNumber);
 
@@ -30,11 +30,9 @@ export class ItemService {
 
   getItem(id: number) {
     const user = this.accountService.currentUser();
-
     if(!user){
       throw new Error('User not found');
     }
-
     return this.http.get<Item>(this.baseUrl + 'items/' + id);
   }
 
@@ -47,13 +45,14 @@ export class ItemService {
   }
 
   getCategories() {
-    if (this.categories.length > 0) return;
+    if (this.categories.length > 0) {
+      return of(this.categories);
+    }
 
-    return this.http.get<string[]>(this.baseUrl + 'items/categories').subscribe({
-      next: res => {
-        this.categories = res;
-        console.log(this.categories);
-      }
-    })
+    return this.http.get<string[]>(this.baseUrl + 'items/categories').pipe(
+      tap(res => this.categories = res)
+    );
   }
+
+
 }

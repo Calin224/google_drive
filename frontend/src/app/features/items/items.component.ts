@@ -2,13 +2,6 @@ import {Component, inject, OnInit} from '@angular/core';
 import {ItemService} from '../../core/services/item.service';
 import {Item} from '../../shared/models/item';
 import {MatButtonModule} from '@angular/material/button';
-import {
-  MatCard, MatCardActions,
-  MatCardHeader,
-  MatCardSubtitle,
-  MatCardTitle
-} from '@angular/material/card';
-import {MatIcon} from '@angular/material/icon';
 import {RouterLink} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
@@ -18,22 +11,34 @@ import {Pagination} from '../../shared/models/pagination';
 import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {MatMenuModule} from '@angular/material/menu';
 import {FiltersDialogComponent} from '../../shared/dialogs/filters-dialog/filters-dialog.component';
+import {Button, ButtonDirective, ButtonIcon, ButtonLabel} from 'primeng/button';
+import {Ripple} from 'primeng/ripple';
+import {FilterIcon, PlusIcon, TrashIcon, } from 'primeng/icons';
+import {Paginator, PaginatorState} from 'primeng/paginator';
+import {Card} from 'primeng/card';
+import { PrimeIcons } from 'primeng/api';
+import {Dialog} from 'primeng/dialog';
+import {MultiSelect} from 'primeng/multiselect';
 
 @Component({
   selector: 'app-items',
   imports: [
     MatButtonModule,
-    MatCard,
-    MatCardHeader,
-    MatCardSubtitle,
-    MatCardTitle,
-    MatCardActions,
-    MatIcon,
     RouterLink,
     ReactiveFormsModule,
     MatPaginatorModule,
     MatMenuModule,
     FormsModule,
+    ButtonDirective,
+    Ripple,
+    ButtonIcon,
+    ButtonLabel,
+    PlusIcon,
+    Paginator,
+    Card,
+    Button,
+    TrashIcon,
+    MultiSelect
   ],
   templateUrl: './items.component.html',
   styleUrl: './items.component.scss'
@@ -43,13 +48,20 @@ export class ItemsComponent implements OnInit {
   items?: Pagination<Item>;
   readonly dialog = inject(MatDialog);
 
+  categoriesOptions: { label: string, value: string }[] = [];
+  categories: string[] = [];
+
   itemParams = new ItemParams();
 
   ngOnInit(): void {
     this.initializeItems();
+    this.itemService.getCategories().subscribe(categories => {
+      this.categories = categories;
+      this.categoriesOptions = categories.map(cat => ({ label: cat, value: cat }));
+    });
   }
 
-  initializeItems(){
+  initializeItems() {
     this.itemService.getCategories();
     this.loadItems();
   }
@@ -72,27 +84,14 @@ export class ItemsComponent implements OnInit {
     const dialogRef = this.dialog.open(CreateItemComponent);
   }
 
-  openFiltersDialog(){
-    const dialogRef = this.dialog.open(FiltersDialogComponent, {
-      minWidth: '500px',
-      data: {
-        selectedCategories: this.itemParams.categories
-      }
-    });
-
-    dialogRef.afterClosed().subscribe({
-      next: res => {
-        if(res){
-          this.itemParams.categories = res.selectedCategories;
-          this.loadItems();
-        }
-      }
-    })
+  handlePageEvent($event: PaginatorState) {
+    this.itemParams.pageNumber = $event.page! + 1;
+    this.itemParams.pageSize = $event.rows!;
+    this.loadItems();
   }
 
-  handlePageEvent($event: PageEvent) {
-    this.itemParams.pageNumber = $event.pageIndex + 1;
-    this.itemParams.pageSize = $event.pageSize;
+  onCategoryChange(event: any) {
+    this.itemParams.categories = event.value;
     this.loadItems();
   }
 }

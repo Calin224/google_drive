@@ -1,29 +1,33 @@
-<mat-dialog-content>
-  <div class="p-10">
+<p-card class="relative">
+  <div class="m-16">
     <div>
-      <h1 class="text-center font-bold text-2xl mb-3">Create new Thread</h1>
+      <h1 class="text-center text-2xl mb-5">Create new Thread</h1>
     </div>
 
-    <form [formGroup]="createItemForm" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="fill" class="w-full mb-4">
-        <mat-label>Name</mat-label>
-        <input type="text" placeholder="name" matInput formControlName="name">
-      </mat-form-field>
+    <form [formGroup]="createItemForm" (ngSubmit)="onSubmit()" class="space-y-4">
 
-      <mat-form-field appearance="fill" class="w-full mb-4">
-        <mat-label>Description</mat-label>
-        <input type="text" placeholder="Description" matInput formControlName="description">
-      </mat-form-field>
+      <p-floatlabel variant="on">
+        <input type="text" pInputText id="on_label" fluid autocomplete="off" formControlName="name">
+        <label for="on_label">Name</label>
+      </p-floatlabel>
 
-      <mat-form-field appearance="fill" class="w-full mb-4">
-        <mat-label>Category</mat-label>
-        <input type="text" placeholder="category" matInput formControlName="category">
-      </mat-form-field>
+      <p-floatlabel variant="on">
+        <input type="text" pInputText id="on_label2" fluid autocomplete="off" formControlName="description">
+        <label for="on_label2">Description</label>
+      </p-floatlabel>
 
-      <button mat-flat-button type="submit">Submit</button>
+      <p-floatlabel variant="on" >
+        <input type="text"  pInputText id="on_label3" fluid autocomplete="off" formControlName="category">
+        <label for="on_label3">Category</label>
+      </p-floatlabel>
+
+      <button pButton pRipple (click)="onSubmit()" class="mt-4 w-full">Submit</button>
     </form>
   </div>
-</mat-dialog-content>
-<mat-dialog-actions>
-    <button mat-button>No Thanks</button>
-</mat-dialog-actions>
+  <div class="absolute top-5 right-5">
+    <button class="opacity-50"  (click)="dialogRef.close()">
+      <i class="pi pi-times hover:text-gray-900 rounded-full p-2 hover:bg-gray-50 transition-all"></i>
+    </button>
+  </div>
+
+</p-card>

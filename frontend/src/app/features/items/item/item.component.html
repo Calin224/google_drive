@@ -1,35 +1,79 @@
 @if (item) {
-  <p>{{ item.name }}</p>
 
-  <button mat-flat-button (click)="openAddComponentDialog()">
-    <mat-icon>add</mat-icon>
-    Add images
-  </button>
+  <p-breadcrumb class="max-w-full" [model]="[{ label: 'Threads' }, {label: item.name}]" [home]="home"
+                styleClass="mb-3"/>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 ">
-    @for (photo of item.photos; track $index) {
-      <mat-card appearance="outlined">
-        <mat-card-header>
-          <img mat-card-image src="{{ photo.url }}"/>
-        </mat-card-header>
+  <section class="relative">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 ">
+      @for (photo of item.photos; track $index) {
+        <p-card>
+          <p-image src="{{ photo.url }}" class="w-full h-32 object-cover"/>
+          <div class="flex justify-between items-center">
+            <button pButton pRipple icon="pi pi-trash" (click)="deletePhoto(photo.id)"></button>
+          </div>
+        </p-card>
+      }
+    </div>
 
-        <mat-card-actions>
-          <button mat-icon-button (click)="deletePhoto(photo.id)">
-            <mat-icon class="text-red-300"> delete</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
+    <p-speeddial [model]="items!" direction="right" [style]="{ position: 'absolute', left: 10, top: 0 }"/>
+
+    @if (isImage) {
+      <div class="mt-16">
+        <p-fileupload name="photos[]" [customUpload]="true" (uploadHandler)="onUpload($event)" [multiple]="true"
+                      accept="image/*" maxFileSize="1000000" mode="advanced">
+          <ng-template #empty>
+            <div>Drag and drop images to here to upload.</div>
+          </ng-template>
+          <ng-template #content>
+            <ul *ngIf="uploadedFiles.length">
+              <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+            </ul>
+          </ng-template>
+        </p-fileupload>
+      </div>
+    } @else if (isPdf) {
+      <div class="mt-16">
+        <p-fileupload name="pdfs[]" [customUpload]="true" (uploadHandler)="onUploadPdf($event)" [multiple]="true"
+                      accept="application/pdf" mode="advanced">
+          <ng-template #empty>
+            <div>Drag and drop pdfs to here to upload.</div>
+          </ng-template>
+          <ng-template #content>
+            <ul *ngIf="uploadedPdfs.length">
+              <li *ngFor="let file of uploadedPdfs">{{ file.name }} - {{ file.size }} bytes</li>
+            </ul>
+          </ng-template>
+        </p-fileupload>
+      </div>
     }
-  </div>
 
-  <!--<mat-card class="max-w-xl mx-auto">-->
-    <!--  <div>-->
-    <!--    <kendo-upload-->
-    <!--      [saveUrl]="'saveUrl'"-->
-    <!--      (upload)="onUpload($event)"-->
-    <!--      [multiple]="true"-->
-    <!--    >-->
-    <!--    </kendo-upload>-->
-    <!--  </div>-->
-    <!--</mat-card>-->
+
+    <div class="mt-16">
+      <ng-container *ngFor="let pdf of item.pdfs">
+        <p-card>
+          <ng-template #header>
+            <div class="flex justify-between items-center">
+              <span>{{ pdf.name.slice(0, -4) }}</span>
+              <!-- If you want a simple download link -->
+<!--              <a [href]="'data:application/pdf;base64,' + pdf.data" target="_blank">Download</a>-->
+              <button pButton pRipple (click)="downloadPdf(pdf)">Download</button>
+            </div>
+          </ng-template>
+          <pdf-viewer
+            [src]="'data:application/pdf;base64,' + pdf.data"
+            [render-text]="true"
+            [show-all]="true"
+            [show-borders]="true"
+            [autoresize]="true"
+            style="width: 100%; height: 600px;">
+            </pdf-viewer>
+          <div class="flex justify-between items-center">
+            <button pButton pRipple icon="pi pi-trash" (click)="deletePdf(pdf.id)"></button>
+          </div>
+        </p-card>
+      </ng-container>
+    </div>
+
+    <p-toast/>
+  </section>
 }

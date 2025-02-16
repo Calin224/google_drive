@@ -23,7 +23,8 @@ public class PdfController(IGenericRepository<Item> repo) : BaseApiController
             {
                 Name = file.FileName,
                 Data = memoryStream.ToArray(),
-                ContentType = file.ContentType
+                ContentType = file.ContentType,
+                ItemId = item.Id
             };
 
             item.Pdfs!.Add(pdf);
