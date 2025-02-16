@@ -37,6 +37,10 @@ export class AccountService {
     return this.http.post(this.baseUrl + 'account/logout', {});
   }
 
+  getAuthState(){
+    return this.http.get<{ isAuthenticated: boolean }>(this.baseUrl + 'account/auth-status');
+  }
+
   initializeUser() {
     this.getUserInfo().subscribe();
   }

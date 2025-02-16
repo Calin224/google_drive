@@ -9,6 +9,7 @@ import {lastValueFrom} from 'rxjs';
 import {authInterceptor} from './core/interceptors/auth.interceptor';
 import {providePrimeNG} from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import {loadingInterceptor} from './core/interceptors/loading.interceptor';
 
 function initializeApp(initService: InitService) {
   return () => lastValueFrom(initService.init());
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, loadingInterceptor])),
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,

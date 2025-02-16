@@ -14,9 +14,7 @@ namespace Core.Entities
         public required string Category { get; set; }
         public List<Photo>? Photos { get; set; } = [];
         public List<Pdf>? Pdfs { get; set; } = [];
-        // // public Pdf? Pdf { get; set; }
-        //
-        // // one to many
+
         public string AppUserId { get; set; } = string.Empty;
         [JsonIgnore]
         public AppUser? AppUser { get; set; }

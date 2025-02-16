@@ -12,18 +12,12 @@ import {ButtonDirective} from 'primeng/button';
 import {Ripple} from 'primeng/ripple';
 import {FileUpload} from 'primeng/fileupload';
 import {Toast} from 'primeng/toast';
-import {MenuItem, MenuItemCommandEvent, MessageService} from 'primeng/api';
+import {MenuItem, MessageService} from 'primeng/api';
 import {Breadcrumb} from 'primeng/breadcrumb';
 import {SpeedDial} from 'primeng/speeddial';
 import {PdfService} from '../../../core/services/pdf.service';
-import {AccountService} from '../../../core/services/account.service';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
-import {NgxExtendedPdfViewerModule} from 'ngx-extended-pdf-viewer';
 
-interface UploadEvent {
-  originalEvent: Event;
-  files: File[];
-}
 
 @Component({
   selector: 'app-item',
@@ -39,7 +33,6 @@ interface UploadEvent {
     Breadcrumb,
     SpeedDial,
     PdfViewerModule,
-    NgxExtendedPdfViewerModule
   ],
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss'],
@@ -51,8 +44,6 @@ export class ItemComponent implements OnInit {
   private photoService = inject(PhotoService);
   private pdfService = inject(PdfService);
   private snackService = inject(SnackbarService);
-  private accountService = inject(AccountService);
-
   itemId?: number;
   item?: Item;
   constructor(private messageService: MessageService) {}

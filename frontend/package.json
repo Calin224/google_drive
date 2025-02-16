@@ -21,6 +21,8 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "@omnedia/ngx-aurora": "^2.0.0",
+    "@omnedia/ngx-neon-underline": "^2.0.0",
     "@primeng/themes": "^19.0.6",
     "@progress/kendo-angular-buttons": "18.1.0",
     "@progress/kendo-angular-common": "18.1.0",

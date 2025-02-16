@@ -43,6 +43,16 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpGet("auth-status")]
+        public ActionResult GetAuthState()
+        {
+            return Ok(new
+            {
+                IsAuthenticated = User.Identity?.IsAuthenticated ?? false
+            });
+        }
+
+
         [HttpGet("user-info")]
         public async Task<ActionResult> GetUserInfo()
         {
@@ -55,12 +65,6 @@ namespace API.Controllers
                 user.LastName,
                 user.Email
             });   
-        }
-
-        [HttpGet]
-        public ActionResult GetAuthState()
-        {
-            return Ok(new {IsAuthenticated = User.Identity?.IsAuthenticated ?? false});
         }
     }
 }

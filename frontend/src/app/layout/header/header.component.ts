@@ -11,6 +11,8 @@ import {Ripple} from 'primeng/ripple';
 import {NgClass} from '@angular/common';
 import {ButtonDirective, ButtonIcon} from 'primeng/button';
 import {Menu} from 'primeng/menu';
+import {BusyService} from '../../core/services/busy.service';
+import {ProgressBar} from 'primeng/progressbar';
 
 @Component({
   selector: 'app-header',
@@ -23,12 +25,14 @@ import {Menu} from 'primeng/menu';
     ButtonDirective,
     Menu,
     ButtonIcon,
+    ProgressBar,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit{
   accountService = inject(AccountService);
+  busyService = inject(BusyService);
   private router = inject(Router);
 
   logout() {
@@ -54,7 +58,7 @@ export class HeaderComponent implements OnInit{
       {
         label: 'Threads',
         icon: 'pi pi-list',
-        href: '/threads'
+        href: '/items'
       }
     ]
 
@@ -62,7 +66,7 @@ export class HeaderComponent implements OnInit{
       {
         label: 'Profile',
         icon: 'pi pi-user',
-        href: '/profile'
+        command: () => this.router.navigateByUrl('/profile')
       },
       {
         label: 'Settings',

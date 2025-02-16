@@ -11,6 +11,8 @@ namespace Core.Specification
         {
             // AddInclude(x => x.Photos);
             ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
+
+            
         }
 
         public ItemSpecification(int id) : base(x => x.Id == id)

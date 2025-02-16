@@ -9,16 +9,20 @@ using Core.Interfaces;
 namespace Core.Specification
 {
     public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecification<T>
-        
+
     {
         public BaseSpecification() : this(null) { }
         public Expression<Func<T, bool>>? Criteria => criteria;
         public List<Expression<Func<T, object>>> Includes { get; } = [];
         public List<string> IncludeStrings { get; set; } = [];
         public int Take { get; private set; }
-        public int Skip { get; private set;  }
-        public bool IsPagingEnabled { get; private set;  }
+        public int Skip { get; private set; }
+        public bool IsPagingEnabled { get; private set; }
         public bool IsDistinct { get; private set; }
+
+        public Expression<Func<T, object>>? OrderBy { get; private set; }
+
+        public Expression<Func<T, object>>? OrderByDescending { get; private set; }
 
         public IQueryable<T> ApplyCriteria(IQueryable<T> query)
         {
@@ -29,6 +33,17 @@ namespace Core.Specification
 
             return query;
         }
+
+        protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+        {
+            OrderBy = orderByExpression;
+        }
+
+        protected void AddOrderByDescending(Expression<Func<T, object>> orderByExpressionDescending)
+        {
+            OrderByDescending = orderByExpressionDescending;
+        }
+
         protected void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             Includes.Add(includeExpression);
