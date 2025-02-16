@@ -25,6 +25,18 @@ export class ItemService {
       params = params.append('categories', itemParams.categories.join(','));
     }
 
+    if (itemParams.folderId) {
+      params = params.set('folderId', itemParams.folderId.toString());
+    }
+
+    if(itemParams.sort){
+      params = params.append('sort', itemParams.sort);
+    }
+
+    if(itemParams.search){
+      params = params.append('search', itemParams.search);
+    }
+
     return this.http.get<Pagination<Item>>(this.baseUrl + 'items', {params});
   }
 
@@ -34,9 +46,10 @@ export class ItemService {
       throw new Error('User not found');
     }
     return this.http.get<Item>(this.baseUrl + 'items/' + id);
-  }
+}
 
-  createItem(item: Partial<Item>) {
+  createItem(item: Partial<Item>, folderId: number) {
+    item.folderId = folderId;
     return this.http.post<Item>(this.baseUrl + 'items', item);
   }
 
@@ -44,12 +57,16 @@ export class ItemService {
     return this.http.delete(this.baseUrl + 'items/' + id);
   }
 
-  getCategories() {
+  getCategories(folderId: number) {
     if (this.categories.length > 0) {
       return of(this.categories);
     }
 
-    return this.http.get<string[]>(this.baseUrl + 'items/categories').pipe(
+    let params = new HttpParams();
+
+    params = params.append('folderId', folderId);
+
+    return this.http.get<string[]>(this.baseUrl + 'items/categories', {params}).pipe(
       tap(res => this.categories = res)
     );
   }

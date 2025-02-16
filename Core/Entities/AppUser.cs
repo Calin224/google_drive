@@ -11,6 +11,6 @@ namespace Core.Entities
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public List<Item>? Items { get; set; }
+        public List<Folder>? Folders { get; set; }
     }
 }

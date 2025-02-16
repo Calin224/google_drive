@@ -12,12 +12,6 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // modelBuilder.Entity<AppUser>()
-            //     .HasMany(e => e.Items)
-            //     .WithOne(e => e.AppUser)
-            //     .HasForeignKey(e => e.AppUserId)
-            //     .IsRequired();
-
             modelBuilder.Entity<Item>()
                 .HasMany(e => e.Photos)
                 .WithOne(e => e.Item)
@@ -32,20 +26,17 @@ namespace Infrastructure.Data
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
 
-            // modelBuilder.Entity<Item>()
-            //     .HasOne(i => i.AppUser)
-            //     .WithMany(u => u.Items)
-            //     .HasForeignKey(i => i.AppUserId)
-            //     .OnDelete(DeleteBehavior.Cascade);
-
-            // modelBuilder.Entity<Item>()
-            //     .Navigation(i => i.AppUser)
-            //     .AutoInclude();
+            modelBuilder.Entity<Folder>()
+                .HasOne(e => e.AppUser)
+                .WithMany(u => u.Folders)
+                .HasForeignKey(e => e.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
 
             modelBuilder.Entity<Item>()
-                .HasMany(e => e.Photos)
-                .WithOne(e => e.Item)
-                .HasForeignKey(e => e.ItemId)
+                .HasOne(e => e.Folder)
+                .WithMany(e => e.Items)
+                .HasForeignKey(e => e.FolderId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
         }

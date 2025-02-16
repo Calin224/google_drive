@@ -6,13 +6,28 @@ namespace Core.Specification
     {
         public ItemSpecification(ItemSpecParams specParams)
             : base(x =>
-                (!specParams.Categories.Any() || specParams.Categories.Contains(x.Category)) &&
-                (string.IsNullOrEmpty(specParams.appUserId) || x.AppUserId == specParams.appUserId))
+                (!specParams.FolderId.HasValue || x.FolderId == specParams.FolderId) &&
+                (specParams.Categories.Count == 0 || specParams.Categories.Contains(x.Category)) && 
+                (string.IsNullOrEmpty(specParams.Search) || x.Name.ToLower().Contains(specParams.Search))
+            )
         {
-            // AddInclude(x => x.Photos);
             ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
 
-            
+            switch(specParams.Sort)
+            {
+                case "dateAsc":
+                    AddOrderBy(x => x.DateCreated);
+                    break;
+                case "dateDesc":
+                    AddOrderByDescending(x => x.DateCreated);
+                    break;
+                case "downloadCount":
+                    AddOrderBy(x => x.DownloadCount);
+                    break;
+                default:
+                    AddOrderBy(x => x.Name);
+                    break;
+            }
         }
 
         public ItemSpecification(int id) : base(x => x.Id == id)

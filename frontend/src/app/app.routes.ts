@@ -6,9 +6,13 @@ import {RegisterComponent} from './features/account/register/register.component'
 import {HomeComponent} from './layout/home/home.component';
 import {authGuard} from './core/guards/auth.guard';
 import {ProfileComponent} from './features/profile/profile.component';
+import { FolderListComponent } from './features/folder-list/folder-list.component';
+import {FolderComponent} from './features/folder-list/folder/folder.component';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent},
+  {path: 'folders', component: FolderListComponent},
+  {path: 'folder/:id', component: FolderComponent},
   {path: 'items', component: ItemsComponent, canActivate: [authGuard]},
   {path: 'item/:id', component: ItemComponent, canActivate: [authGuard]},
   {path: 'account/login', component: LoginComponent},

@@ -21,7 +21,9 @@
         <label for="on_label3">Category</label>
       </p-floatlabel>
 
-      <button pButton pRipple (click)="onSubmit()" class="mt-4 w-full">Submit</button>
+      <button type="submit" pButton [disabled]="isSubmitting">
+        Submit
+      </button>
     </form>
   </div>
   <div class="absolute top-5 right-5">

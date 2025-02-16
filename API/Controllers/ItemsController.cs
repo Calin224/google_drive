@@ -8,18 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class ItemsController(IGenericRepository<Item> repo, SignInManager<AppUser> signInManager) : BaseApiController
+    public class ItemsController(IGenericRepository<Item> itemRepo, IGenericRepository<Folder> folderRepo, SignInManager<AppUser> signInManager) : BaseApiController
     {
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Item>>> GetItems([FromQuery] ItemSpecParams specParams)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null) return Unauthorized("User not found");
-
-            specParams.appUserId = userId;
             var spec = new ItemSpecification(specParams);
-            return await CreatePagedResult(repo, spec, specParams.PageIndex, specParams.PageSize);
+            return await CreatePagedResult(itemRepo, spec, specParams.PageIndex, specParams.PageSize);
         }
         
         [Authorize]
@@ -27,49 +23,47 @@ namespace API.Controllers
         public async Task<ActionResult<Item>> CreateItem(Item item)
         {
             var user = await signInManager.UserManager.GetUserAsync(User);
+            var folder = await folderRepo.GetByIdAsync(item.FolderId);
 
-            if (user.Items == null)
+            if (folder == null || folder.AppUserId != user.Id)
             {
-                user.Items = new List<Item>();
+                return BadRequest("Folder not found for this user");
             }
-            user.Items.Add(item);
 
-            var res = await signInManager.UserManager.UpdateAsync(user);
+            itemRepo.Add(item);
             
-            if(!res.Succeeded) return BadRequest("Item cannot be added");
+            if (await itemRepo.SaveAllAsync())
+                return Ok(item);
 
-            return Ok(item);
+            return BadRequest("Item cannot be added");
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetItem(int id)
         {
             var spec = new ItemSpecification(id);
-            var item = await repo.GetEntityWithSpec(spec);
+            var item = await itemRepo.GetEntityWithSpec(spec);
             if (item == null) return NotFound();
             return Ok(item);
         }
 
         [HttpGet("categories")]
-        public async Task<ActionResult<IReadOnlyList<string>>> GetCategories()
+        public async Task<ActionResult<IReadOnlyList<string>>> GetCategories([FromQuery] int folderId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(userId == null) return Unauthorized();
-
-            var spec = new CategorySpecification(userId);
-            var categories = await repo.ListAsync(spec);
+            var spec = new CategorySpecification(folderId);
+            var categories = await itemRepo.ListAsync(spec);
             return Ok(categories);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
-            var item = await repo.GetByIdAsync(id);
+            var item = await itemRepo.GetByIdAsync(id);
             if (item == null) return NotFound();
 
-            repo.Delete(item);
+            itemRepo.Delete(item);
 
-            if (await repo.SaveAllAsync())
+            if (await itemRepo.SaveAllAsync())
                 return Ok();
 
             return BadRequest("Item cannot be deleted");

@@ -20,7 +20,6 @@ import {Card} from 'primeng/card';
     ReactiveFormsModule,
     FloatLabel,
     InputText,
-    Ripple,
     Card,
     ButtonDirective
   ],
@@ -34,28 +33,39 @@ export class CreateItemComponent {
   protected dialogRef = inject(MatDialogRef<CreateItemComponent>);
   private accountService = inject(AccountService);
 
+  folderId!: number;
+  isSubmitting = false;
+
   createItemForm = this.fb.group({
     name: ['', Validators.required],
     description: ['', Validators.required],
     category: ['', Validators.required]
   })
 
-  onSubmit(){
-    if (this.createItemForm.valid) {
-      const formValues = this.createItemForm.value;
-      const item = {
-        name: formValues.name!,
-        description: formValues.description!,
-        category: formValues.category!,
-      };
+  onSubmit() {
+    if (!this.isSubmitting && this.createItemForm.valid) {
+        this.isSubmitting = true;
+        const formValues = this.createItemForm.value;
+        const item = {
+            name: formValues.name!,
+            description: formValues.description!,
+            category: formValues.category!,
+            folderId: this.folderId
+        };
 
-      this.itemService.createItem(item).subscribe({
-        next: createdItem => {
-          this.router.navigateByUrl(`/item/${createdItem.id}`);
-          this.dialogRef.close();
-        }
-      });
+        this.itemService.createItem(item, this.folderId).subscribe({
+            next: createdItem => {
+                this.dialogRef.close('created');
+            },
+            error: error => {
+                this.isSubmitting = false;
+                console.error('Error creating item:', error);
+            },
+            complete: () => {
+                this.isSubmitting = false;
+            }
+        });
     }
-  }
+}
 
 }

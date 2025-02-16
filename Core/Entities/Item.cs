@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Core.Entities
 {
@@ -14,9 +9,11 @@ namespace Core.Entities
         public required string Category { get; set; }
         public List<Photo>? Photos { get; set; } = [];
         public List<Pdf>? Pdfs { get; set; } = [];
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public int DownloadCount { get; set; } = 0;   
+        
 
-        public string AppUserId { get; set; } = string.Empty;
-        [JsonIgnore]
-        public AppUser? AppUser { get; set; }
+        public int FolderId { get; set; }
+        public Folder? Folder { get; set; }
     }
 }

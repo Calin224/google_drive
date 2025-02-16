@@ -1,3 +1,4 @@
+
 import {Component, inject, OnInit} from '@angular/core';
 import {ItemService} from '../../core/services/item.service';
 import {Item} from '../../shared/models/item';
@@ -24,74 +25,76 @@ import {MultiSelect} from 'primeng/multiselect';
   selector: 'app-items',
   imports: [
     MatButtonModule,
-    RouterLink,
+    // RouterLink,
     ReactiveFormsModule,
     MatPaginatorModule,
     MatMenuModule,
     FormsModule,
-    ButtonDirective,
-    Ripple,
-    ButtonIcon,
-    ButtonLabel,
-    PlusIcon,
-    Paginator,
-    Card,
-    Button,
-    TrashIcon,
-    MultiSelect
+    // ButtonDirective,
+    // Ripple,
+    // ButtonIcon,
+    // ButtonLabel,
+    // PlusIcon,
+    // Paginator,
+    // Card,
+    // Button,
+    // TrashIcon,
+    // MultiSelect
   ],
   templateUrl: './items.component.html',
   styleUrl: './items.component.scss'
 })
-export class ItemsComponent implements OnInit {
-  itemService = inject(ItemService);
-  items?: Pagination<Item>;
-  readonly dialog = inject(MatDialog);
-
-  categoriesOptions: { label: string, value: string }[] = [];
-  categories: string[] = [];
-
-  itemParams = new ItemParams();
-
-  ngOnInit(): void {
-    this.initializeItems();
-    this.itemService.getCategories().subscribe(categories => {
-      this.categories = categories;
-      this.categoriesOptions = categories.map(cat => ({ label: cat, value: cat }));
-    });
-  }
-
-  initializeItems() {
-    this.itemService.getCategories();
-    this.loadItems();
-  }
-
-  loadItems() {
-    this.itemService.getItems(this.itemParams).subscribe({
-      next: items => this.items = items,
-      error: error => console.log(error)
-    });
-  }
-
-  deleteItem(id: number) {
-    this.itemService.deleteItem(id).subscribe({
-      next: () => this.loadItems(),
-      error: error => console.log(error)
-    });
-  }
-
-  openDialog() {
-    const dialogRef = this.dialog.open(CreateItemComponent);
-  }
-
-  handlePageEvent($event: PaginatorState) {
-    this.itemParams.pageNumber = $event.page! + 1;
-    this.itemParams.pageSize = $event.rows!;
-    this.loadItems();
-  }
-
-  onCategoryChange(event: any) {
-    this.itemParams.categories = event.value;
-    this.loadItems();
-  }
+export class ItemsComponent {
+  // itemService = inject(ItemService);
+  // items?: Pagination<Item>;
+  // readonly dialog = inject(MatDialog);
+  //
+  // categoriesOptions: { label: string, value: string }[] = [];
+  // categories: string[] = [];
+  //
+  // itemParams = new ItemParams();
+  //
+  // ngOnInit(): void {
+  //   this.initializeItems();
+  //   this.itemService.getCategories().subscribe(categories => {
+  //     this.categories = categories;
+  //     this.categoriesOptions = categories.map(cat => ({ label: cat, value: cat }));
+  //   });
+  // }
+  //
+  // initializeItems() {
+  //   this.itemService.getCategories();
+  //   this.loadItems();
+  // }
+  //
+  // loadItems() {
+  //   this.itemService.getItems(this.itemParams).subscribe({
+  //     next: items => this.items = items,
+  //     error: error => console.log(error)
+  //   });
+  // }
+  //
+  // deleteItem(id: number) {
+  //   this.itemService.deleteItem(id).subscribe({
+  //     next: () => {
+  //       console.log('item deleted');
+  //     },
+  //     error: error => console.log(error)
+  //   });
+  // }
+  //
+  // openDialog() {
+  //   const dialogRef = this.dialog.open(CreateItemComponent);
+  // }
+  //
+  // handlePageEvent($event: PaginatorState) {
+  //   this.itemParams.pageNumber = $event.page! + 1;
+  //   this.itemParams.pageSize = $event.rows!;
+  //   this.loadItems();
+  // }
+  //
+  // onCategoryChange(event: any) {
+  //   this.itemParams.categories = event.value;
+  //   this.loadItems();
+  // }
 }

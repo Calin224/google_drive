@@ -16,6 +16,8 @@
             }
         }
 
+        public string? Sort { get; set; }
+
         private List<string> _categories = [];
         public List<string> Categories
         {
@@ -23,6 +25,13 @@
             set => _categories = value.SelectMany(x => x.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
         }
 
-        public string? appUserId { get; set; }
+        public int? FolderId { get; set; }
+
+        private string? _search;
+        public string Search
+        {
+            get => _search ?? "";
+            set => _search = value.ToLower();
+        }
     }
 }
