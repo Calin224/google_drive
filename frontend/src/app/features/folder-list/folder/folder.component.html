@@ -26,17 +26,17 @@
       </p-multiselect>
     </div>
 
-    <form (ngSubmit)="onSearchChange()" class="flex gap-3">
+<!--    <form (ngSubmit)="onSearchChange()" class="flex gap-3">-->
       <p-iconfield>
         <p-inputicon styleClass="pi pi-search" />
-        <input type="search" pInputText placeholder="Search" name="search" [(ngModel)]="itemParams.search" />
+        <input type="search" pInputText placeholder="Search" name="search" (ngModelChange)="changeFn($event)" [(ngModel)]="itemParams.search" />
       </p-iconfield>
 
-      <button pButton type="submit">
-        <i class="pi pi-filter"></i>
-        Submit
-      </button>
-    </form>
+<!--      <button pButton type="submit">-->
+<!--        <i class="pi pi-filter"></i>-->
+<!--        Submit-->
+<!--      </button>-->
+<!--    </form>-->
   </div>
 
   <div class="grid grid-cols-5 gap-4">

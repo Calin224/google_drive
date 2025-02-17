@@ -17,6 +17,7 @@ import {Breadcrumb} from 'primeng/breadcrumb';
 import {SpeedDial} from 'primeng/speeddial';
 import {PdfService} from '../../../core/services/pdf.service';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
+import {PdfsComponent} from './pdfs/pdfs.component';
 
 
 @Component({
@@ -33,6 +34,7 @@ import {PdfViewerModule} from 'ng2-pdf-viewer';
     Breadcrumb,
     SpeedDial,
     PdfViewerModule,
+    PdfsComponent,
   ],
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss'],

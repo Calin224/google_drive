@@ -97,6 +97,7 @@ export class FolderComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'created') {
         this.loadFolder();
+        this.loadItems();
       }
     });
   }
@@ -120,8 +121,8 @@ export class FolderComponent implements OnInit{
     });
   }
 
-  onSearchChange() {
-    this.itemParams.pageNumber = 1;
+  changeFn(event: any) {
+    this.itemParams.search = event;
     this.loadItems();
   }
 }
