@@ -36,6 +36,32 @@ namespace API.Controllers
         }
 
         [Authorize]
+        [HttpPut("update-profile")]
+        public async Task<ActionResult> UpdateProfile(UpdateUserDto updateUserDto)
+        {
+            var user = await signInManager.UserManager.GetUserByEmail(User);
+            if (user == null) return Unauthorized("User not found");
+
+            user.FirstName = updateUserDto.FirstName;
+            user.LastName = updateUserDto.LastName;
+            user.Email = updateUserDto.Email;
+            user.UserName = updateUserDto.Email;
+
+            var result = await signInManager.UserManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+                return ValidationProblem();
+            }
+
+            await signInManager.RefreshSignInAsync(user);
+            return Ok();
+        }
+
+        [Authorize]
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
         {

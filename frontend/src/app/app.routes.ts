@@ -11,8 +11,8 @@ import {FolderComponent} from './features/folder-list/folder/folder.component';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'folders', component: FolderListComponent},
-  {path: 'folder/:id', component: FolderComponent},
+  {path: 'folders', component: FolderListComponent, canActivate: [authGuard]},
+  {path: 'folder/:id', component: FolderComponent, canActivate: [authGuard]},
   {path: 'items', component: ItemsComponent, canActivate: [authGuard]},
   {path: 'item/:id', component: ItemComponent, canActivate: [authGuard]},
   {path: 'account/login', component: LoginComponent},

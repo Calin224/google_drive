@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { User } from '../../shared/models/user';
-import { map } from 'rxjs';
+import {map, tap} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,18 @@ export class AccountService {
 
   register(values: any) {
     return this.http.post(this.baseUrl + 'account/register', values);
+  }
+
+  updateProfile(updateData: any) {
+    return this.http.put(this.baseUrl + 'account/update-profile', updateData)
+      .pipe(
+        tap(() => {
+          this.http.get<User>(this.baseUrl + 'account/user-info').subscribe({
+            next: updatedUser => this.currentUser.set(updatedUser),
+            error: err => console.error('Error fetching updated user:', err)
+          });
+        })
+      );
   }
 
   logout() {
