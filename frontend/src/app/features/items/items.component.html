@@ -1,0 +1,55 @@
+<!--@if (items) {-->
+<!--  <div class="flex justify-between items-center mb-5">-->
+<!--    <button pButton pRipple (click)="openDialog()">-->
+<!--      <PlusIcon pButtonIcon/>-->
+<!--      <span pButtonLabel>Add Thread</span>-->
+<!--    </button>-->
+
+<!--    <div class="flex flex-wrap justify-between items-center gap-4 bg-[#101414] px-4 py-2 rounded-xl">-->
+<!--      <div class="card flex justify-center">-->
+<!--        <p-paginator-->
+<!--          (onPageChange)="handlePageEvent($event)"-->
+<!--          [first]="(itemParams.pageNumber - 1) * itemParams.pageSize"-->
+<!--          [rows]="itemParams.pageSize"-->
+<!--          [totalRecords]="items.count"-->
+<!--          [rowsPerPageOptions]="[5, 10, 20, 30]"-->
+<!--        ></p-paginator>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div class="card flex justify-center">-->
+<!--      <p-multiselect-->
+<!--        [options]="categoriesOptions"-->
+<!--        [(ngModel)]="itemParams.categories"-->
+<!--        placeholder="Filters"-->
+<!--        [maxSelectedLabels]="3"-->
+<!--        display="chip"-->
+<!--        (onChange)="onCategoryChange($event)"-->
+<!--        styleClass="w-full md:w-80"-->
+<!--      >-->
+<!--      </p-multiselect>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="grid grid-cols-5 gap-4">-->
+<!--    @for (item of items.data; track item.id) {-->
+
+<!--      <p-card header="{{item.name}}" subheader="{{item.category}}" routerLink="/item/{{item.id}}"-->
+<!--              class="cursor-pointer hover:bg-gray-900 transition-all duration-300 ease-in-out">-->
+<!--        <ng-template #footer>-->
+<!--          <div (click)="$event.stopPropagation()" class="grid grid-cols-2 gap-3">-->
+<!--            <p-button pRipple pButtonIcon [outlined]="true" styleClass="w-full" severity="danger" (click)="deleteItem(item.id)">-->
+<!--              <TrashIcon></TrashIcon>-->
+<!--            </p-button>-->
+
+<!--            <p-button pRipple pButtonIcon [outlined]="true" styleClass="w-full" severity="help">-->
+<!--              <i class="pi pi-heart"></i>-->
+<!--            </p-button>-->
+<!--          </div>-->
+<!--        </ng-template>-->
+<!--      </p-card>-->
+<!--    }-->
+<!--  </div>-->
+<!--}-->
+
+

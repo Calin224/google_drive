@@ -1,0 +1,196 @@
+@if (item) {
+
+  <p-breadcrumb class="max-w-full" [model]="[{ label: 'Threads' }, {label: item.name}]" [home]="home"
+                styleClass="mb-3"/>
+
+  <section class="relative">
+    <p-speeddial [model]="items!" direction="right" [style]="{ position: 'absolute', left: 10, top: 0 }"/>
+
+    <div class="pt-14">
+      @if (isImage) {
+        <div class="">
+          <p-fileupload name="photos[]" [customUpload]="true" (uploadHandler)="onUpload($event)" [multiple]="true"
+                        accept="image/*" maxFileSize="1000000" mode="advanced">
+            <ng-template #empty>
+              <div>Drag and drop images to here to upload.</div>
+            </ng-template>
+            <ng-template #content>
+              <ul *ngIf="uploadedFiles.length">
+                <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+              </ul>
+            </ng-template>
+          </p-fileupload>
+        </div>
+      } @else if (isPdf) {
+        <div class="">
+          <p-fileupload name="pdfs[]" [customUpload]="true" (uploadHandler)="onUploadPdf($event)" [multiple]="true"
+                        accept="application/pdf" mode="advanced">
+            <ng-template #empty>
+              <div>Drag and drop pdfs to here to upload.</div>
+            </ng-template>
+            <ng-template #content>
+              <ul *ngIf="uploadedPdfs.length">
+                <li *ngFor="let file of uploadedPdfs">{{ file.name }} - {{ file.size }} bytes</li>
+              </ul>
+            </ng-template>
+          </p-fileupload>
+        </div>
+      } @else if (isZip) {
+        <p-fileupload name="zips[]" [customUpload]="true" (uploadHandler)="onUploadZip($event)" [multiple]="false"
+                      accept=".zip,application/zip"
+                      mode="advanced">
+          <ng-template #empty>
+            <div>Drag and drop zip files here to upload.</div>
+          </ng-template>
+          <ng-template #content>
+            <ul *ngIf="uploadedZips.length">
+              <li *ngFor="let file of uploadedZips">{{ file.name }} - {{ file.size }} bytes</li>
+            </ul>
+          </ng-template>
+        </p-fileupload>
+
+<!--        <div class="">-->
+<!--          @for (zip of item.zips; track zip.id) {-->
+<!--            <div class="">-->
+
+<!--              <div>{{ zip.fileName }}</div>-->
+
+<!--              <div class="">-->
+
+<!--                <a pButton [href]="zip.blobUrl">-->
+<!--                  <i class="pi pi-download"></i>-->
+<!--                  Downlaod-->
+<!--                </a>-->
+
+<!--                <button pButton pRipple (click)="deleteZip(zip.id)" severity="secondary">-->
+<!--                  <i class="pi pi-trash"></i>-->
+<!--                </button>-->
+
+<!--              </div>-->
+<!--            </div>-->
+<!--          }-->
+<!--        </div>-->
+
+        <div class="overflow-x-auto w-full">
+          <table class="table w-full">
+            <thead>
+            <tr>
+              <th></th>
+              <th>File Name</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody class="space-y-3">
+              @for (zip of item.zips; track zip.id) {
+                <tr class="bg-base-200 text-center">
+                  <th>{{ zip.id }}</th>
+                  <td>{{ zip.fileName }}</td>
+                  <td class="flex gap-3 items-center justify-center">
+                    <a pButton [href]="zip.blobUrl">
+                      <i class="pi pi-download"></i>
+                      Downlaod
+                    </a>
+
+                    <button pButton pRipple (click)="deleteZip(zip.id)" severity="secondary">
+                      <i class="pi pi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+      } @else if (isEditor) {
+        @if (hasEditor == false) {
+          <div>
+            <p-editor [(ngModel)]="editorText" [style]="{height: '300px'}"></p-editor>
+            <button pButton (click)="uploadEditorText()">Post</button>
+          </div>
+        } @else if (hasEditor) {
+          <div>
+            @if (!visibleEditor) {
+              <p-editor [(ngModel)]="item.editor!.text" [readonly]="true" [style]="{height: '300px'}"></p-editor>
+              <button pButton (click)="visibleEditor = true">Edit</button>
+            }
+
+            @if (visibleEditor) {
+              <p-editor [(ngModel)]="item.editor!.text" [style]="{height: '300px'}"></p-editor>
+              <button pButton (click)="editEditorText()">Update</button>
+            }
+
+            <button pButton pRipple (click)="deleteEditorText()">Clear Text</button>
+
+            <button pButton pRipple (click)="cancelEditorEdit()">Cancel</button>
+          </div>
+        }
+      }
+    </div>
+
+    <div class="mt-3">
+      <div class="flex gap-4">
+        <div>
+          <p-drawer header="{{item.name}}'s pdfs" [(visible)]="visible" position="full">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+              @for (pdf of item.pdfs; track $index) {
+                <p-card class="border-2 border-[#34d399] rounded-xl">
+                  <div class="flex justify-between items-center mb-3">
+                    @if (pdf.name.length < 30) {
+                      {{ pdf.name }}
+                    } @else {
+                      <p [pTooltip]="tooltipContent" tooltipPosition="top">{{ pdf.name.slice(0, 26) }}...</p>
+                      <ng-template #tooltipContent>
+                        {{ pdf.name }}
+                      </ng-template>
+                    }
+
+                    <a pButton pRipple icon="pi pi-download" href="{{pdf.url}}" target="_blank"></a>
+                  </div>
+
+                  <ng-template pTemplate="footer" pStyleClass="w-full">
+                    <button pButton pRipple severity="secondary" class="w-full" (click)="deletePdf(pdf.id)">
+                      <i class="pi pi-trash"></i>
+                    </button>
+                  </ng-template>
+                </p-card>
+              }
+            </div>
+          </p-drawer>
+
+          <p-button (click)="visible = true" icon="pi pi-window-maximize" label="View PDFs {{item.pdfs?.length}}"/>
+
+        </div>
+
+        <div>
+          <p-drawer header="{{item.name}}'s images" [(visible)]="visibleImages" position="full">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              @for (photo of item.photos; track $index) {
+                <p-card class="border-2 border-[#34d399] rounded-xl">
+                  <div class="flex justify-center items-center mb-3">
+                    <p-image src="{{photo.url}}" styleClass="rounded-xl" width="250" [preview]="true">
+                      <ng-template #indicator>
+                        <i class="pi pi-search"></i>
+                      </ng-template>
+                    </p-image>
+                  </div>
+
+                  <ng-template pTemplate="footer">
+                    <button pButton pRipple severity="secondary" class="w-full" (click)="deleteImage(photo.id)">
+                      <i class="pi pi-trash"></i>
+                    </button>
+                  </ng-template>
+                </p-card>
+              }
+            </div>
+          </p-drawer>
+
+          <p-button (click)="visibleImages = true" icon="pi pi-window-maximize"
+                    label="View images {{item.photos?.length}}"/>
+        </div>
+      </div>
+    </div>
+
+    <p-toast position="bottom-right"/>
+  </section>
+}

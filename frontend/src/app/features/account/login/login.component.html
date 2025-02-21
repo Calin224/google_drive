@@ -1,0 +1,19 @@
+<mat-card class="max-w-xl mx-auto">
+    <div class="text-[2em] font-bold mt-3 text-center">
+      Login
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="m-6">
+      <mat-form-field appearance="fill" class="w-full mb-4">
+        <mat-label>Email</mat-label>
+        <input type="email" placeholder="Email" matInput formControlName="email">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill" class="w-full mb-4">
+        <mat-label>Password</mat-label>
+        <input type="password" placeholder="Password" matInput formControlName="password">
+      </mat-form-field>
+  
+      <button mat-flat-button type="submit" class="w-full">Sign in</button>
+    </form>
+  </mat-card>
+  

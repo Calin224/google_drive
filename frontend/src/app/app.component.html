@@ -1,0 +1,10 @@
+<app-header></app-header>
+
+
+@if (location.path() == '') {
+  <app-home></app-home>
+} @else {
+  <div class="max-w-6xl mx-auto mt-5">
+    <router-outlet></router-outlet>
+  </div>
+}

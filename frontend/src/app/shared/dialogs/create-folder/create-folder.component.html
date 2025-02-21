@@ -1,0 +1,25 @@
+<p-card class="relative">
+  <div class="m-16">
+    <div>
+      <h1 class="text-center text-2xl mb-5">Create new folder</h1>
+    </div>
+
+    <form [formGroup]="createFolderForm" (ngSubmit)="onSubmit()" class="space-y-4">
+
+      <p-floatlabel variant="on">
+        <input type="text" pInputText id="on_label" fluid autocomplete="off" formControlName="name">
+        <label for="on_label">Name</label>
+      </p-floatlabel>
+
+      <button type="submit" pButton [disabled]="isSubmitting">
+        Create Folder
+      </button>
+    </form>
+  </div>
+  <div class="absolute top-5 right-5">
+    <button class="opacity-50" (click)="dialogRef.close()">
+      <i class="pi pi-times hover:text-gray-900 rounded-full p-2 hover:bg-gray-50 transition-all"></i>
+    </button>
+  </div>
+
+</p-card>

@@ -1,0 +1,52 @@
+<div class="flex justify-between items-center mb-5">
+  <button pButton pRipple (click)="openDialog()">
+    <i class="pi pi-plus"></i>
+    <span pButtonLabel>Add Thread</span>
+  </button>
+
+  <div class="flex flex-wrap justify-between items-center gap-4 bg-[#101414] px-4 py-2 rounded-xl">
+    <div class="card flex justify-center">
+      <p-paginator
+        (onPageChange)="handlePageEvent($event)"
+        [first]="(folderParams.pageNumber - 1) * folderParams.pageSize"
+        [rows]="folderParams.pageSize"
+        [totalRecords]="folders?.count"
+        [rowsPerPageOptions]="[5, 10, 20, 30]"
+      ></p-paginator>
+    </div>
+  </div>
+
+  <div class="card flex justify-center">
+    <!--        <p-multiselect-->
+    <!--          [options]="categoriesOptions"-->
+    <!--          [(ngModel)]="itemParams.categories"-->
+    <!--          placeholder="Filters"-->
+    <!--          [maxSelectedLabels]="3"-->
+    <!--          display="chip"-->
+    <!--          (onChange)="onCategoryChange($event)"-->
+    <!--          styleClass="w-full md:w-80"-->
+    <!--        >-->
+    <!--        </p-multiselect>-->
+  </div>
+</div>
+
+@if (busyService.loading) {
+  <div class="flex flex-row flex-wrap gap-4">
+    <p-skeleton width="13rem" height="10rem"></p-skeleton>
+    <p-skeleton width="13rem" height="10rem"></p-skeleton>
+    <p-skeleton width="13rem" height="10rem"></p-skeleton>
+  </div>
+}
+
+<div class="grid grid-cols-5 gap-4">
+  @for (folder of folders?.data; track $index) {
+    <p-card routerLink="/folder/{{folder.id}}" header="{{folder.name}}" subheader="{{folder.items.length}}">
+      <div (click)="$event.stopPropagation()">
+        <button pButton (click)="deleteFolder(folder.id)">
+          <i class="pi pi-trash"></i>
+        </button>
+      </div>
+    </p-card>
+  }
+</div>
+

@@ -1,0 +1,38 @@
+<p-menubar [model]="items" styleClass="">
+  <ng-template pTemplate="start">
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
+      <defs><linearGradient id="rLJlwOCtFGybrKyNT3989a_BTZ3w6agexne_gr1" x1="23.999" x2="23.999" y1="2197.682" y2="2191.189" data-name="ÐÐµÐ·ÑÐ¼ÑÐ½Ð½ÑÐ¹ Ð³ÑÐ°Ð´Ð¸ÐµÐ½Ñ 258" gradientTransform="translate(0 -2154)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#c26715"></stop><stop offset=".508" stop-color="#b85515"></stop><stop offset="1" stop-color="#ad3f16"></stop></linearGradient></defs><path fill="url(#rLJlwOCtFGybrKyNT3989a_BTZ3w6agexne_gr1)" d="M20.999,35h6v8a1.00036,1.00036,0,0,1-1,1h-4a1.00036,1.00036,0,0,1-1-1Z"></path><path fill="#107c42" d="M23.99695,12.873,9.312,34.239A1.76174,1.76174,0,0,0,10.763,37H37.235a1.75942,1.75942,0,0,0,1.451-2.757Z"></path><path fill="#21a366" d="M23.999,7.839,13.286,24.301A1.74559,1.74559,0,0,0,14.751,27H33.247a1.74789,1.74789,0,0,0,1.465-2.703Z"></path><path fill="#33c481" d="M22.61316,4.316l-5.374,9.11A1.70534,1.70534,0,0,0,18.70716,16h10.582a1.70922,1.70922,0,0,0,1.472-2.575l-5.374-9.11A1.61166,1.61166,0,0,0,22.61316,4.316Z"></path>
+    </svg>
+  </ng-template>
+  <ng-template #item let-item let-root="root">
+    <a routerLink="{{ item.href }}" pRipple class="flex items-center justify-center align-bottom p-menubar-item-link">
+      <i class="pi pi-fw opacity-45" [ngClass]="item.icon"></i>
+      <span>{{item.label}}</span>
+    </a>
+  </ng-template>
+  <ng-template #end>
+    @if(accountService.currentUser()){
+      <div class="flex items-center gap-2">
+        <p-menu #menu [model]="its" [popup]="true"></p-menu>
+        <button pButton (click)="menu.toggle($event)">{{accountService.currentUser() | name}}</button>
+        <p-avatar image="{{accountService.currentUser()?.profile?.url}}" shape="circle"></p-avatar>
+      </div>
+    }@else{
+      <div class="flex items-center gap-2">
+        <button pButton pButtonIcon pRipple routerLink="/account/login">
+          <i class="pi pi-user"></i>
+          Login
+        </button>
+
+        <button pButton pButtonIcon pRipple severity="secondary" routerLink="/account/register">
+          <i class="pi pi-user-plus"></i>
+          Register
+        </button>
+      </div>
+    }
+  </ng-template>
+</p-menubar>
+@if(busyService.loading){
+  <p-progressbar mode="indeterminate" [style]="{ height: '6px' }"></p-progressbar>
+}
+

@@ -1,0 +1,52 @@
+<div *ngIf="items">
+  <div class="flex justify-between items-center mb-5">
+    <button pButton pRipple (click)="openCreateItemDialog()">
+      <PlusIcon></PlusIcon>
+      Create
+    </button>
+
+    <p-paginator
+      (onPageChange)="handlePageEvent($event)"
+      [first]="(itemParams.pageNumber - 1) * itemParams.pageSize"
+      [rows]="itemParams.pageSize"
+      [totalRecords]="items.count"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    ></p-paginator>
+
+    <div class="card flex justify-center">
+      <p-multiselect
+        [options]="categoriesOptions"
+        [(ngModel)]="itemParams.categories"
+        placeholder="Filters"
+        [maxSelectedLabels]="3"
+        display="chip"
+        (onChange)="onCategoryChange($event)"
+        styleClass="w-full md:w-80"
+      >
+      </p-multiselect>
+    </div>
+
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search"/>
+      <input type="search" pInputText placeholder="Search" name="search" (ngModelChange)="changeFn($event)"
+             [(ngModel)]="itemParams.search"/>
+    </p-iconfield>
+  </div>
+
+  <div class="grid grid-cols-5 gap-4">
+    <div *ngFor="let item of items?.data">
+      <p-card header="{{item.name}}" subheader="{{item.category}}" routerLink="/item/{{item.id}}">
+
+        <ng-template pTemplate="footer">
+          <div (click)="$event.stopPropagation()">
+            <p-button pRipple pButtonIcon [outlined]="true" styleClass="w-full" severity="danger"
+                      (click)="deleteItem(item.id)">
+              <TrashIcon></TrashIcon>
+            </p-button>
+          </div>
+        </ng-template>
+
+      </p-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  @for(photo of photos; track $index){
+    <p-card class="border-2 border-[#34d399] rounded-xl">
+      <div class="flex justify-center items-center mb-3">
+        <p-image src="{{photo.url}}" styleClass="rounded-xl" width="250" [preview]="true">
+          <ng-template #indicator>
+            <i class="pi pi-search"></i>
+          </ng-template>
+        </p-image>
+      </div>
+    </p-card>
+  }
+</div>
