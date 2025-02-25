@@ -15,12 +15,7 @@ import {NgIf} from '@angular/common';
 @Component({
   selector: 'app-login',
   imports: [
-    MatCard,
-    MatFormField,
     ReactiveFormsModule,
-    MatLabel,
-    MatInput,
-    MatButton,
     Button,
     IftaLabel,
     Card,

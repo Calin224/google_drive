@@ -23,9 +23,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 @Component({
   selector: 'app-folder-list',
   imports: [
-    ButtonDirective,
     ButtonLabel,
-    Ripple,
     Card,
     RouterLink,
     Paginator,

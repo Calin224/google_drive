@@ -29,7 +29,6 @@ import {InputText} from 'primeng/inputtext';
     Ripple,
     Card,
     Paginator,
-    NgIf,
     MultiSelect,
     FormsModule,
     PlusIcon,
