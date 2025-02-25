@@ -3362,7 +3362,12 @@
     semver "7.5.4"
     typescript ">=5.0.0"
 
-"@swc/core-win32-x64-msvc@^1.10.16", "@swc/core-win32-x64-msvc@1.10.16":
+"@swc/core-win32-x64-msvc@^1.11.1":
+  version "1.11.1"
+  resolved "https://registry.npmjs.org/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.11.1.tgz"
+  integrity sha512-6bEEC/XU1lwYzUXY7BXj3nhe7iBF9+i9dVo+hbiVxXZMrD0LUd+7urOBM3NtVnDsUaR6Ge/g7aR+OfpgYscKOg==
+
+"@swc/core-win32-x64-msvc@1.10.16":
   version "1.10.16"
   resolved "https://registry.npmjs.org/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.10.16.tgz"
   integrity sha512-p0blVm0R8bjaTtmW+FoPmLxLSQdRNbqhuWcR/8g80OzMSkka9mk5/J3kn/5JRVWh+MaR9LHRHZc1Q1L8zan13g==

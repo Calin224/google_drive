@@ -73,7 +73,7 @@
     "@angular/compiler-cli": "^19.0.0",
     "@spartan-ng/cli": "^0.0.1-alpha.404",
     "@swc/core": "^1.10.16",
-    "@swc/core-win32-x64-msvc": "^1.10.16",
+    "@swc/core-win32-x64-msvc": "^1.11.1",
     "@swc/wasm": "^1.10.16",
     "@types/jasmine": "~5.1.0",
     "autoprefixer": "^10.4.20",
