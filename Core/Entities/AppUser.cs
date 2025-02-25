@@ -13,5 +13,8 @@ namespace Core.Entities
         public string? LastName { get; set; }
         public List<Folder>? Folders { get; set; }
         public Profile? Profile { get; set; }
+
+        public List<UserFollow> FollowedByUsers { get; set; } = [];
+        public List<UserFollow> FollowedUsers { get; set; } = [];
     }
 }

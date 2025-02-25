@@ -1,45 +1,56 @@
-<div class="max-w-2xl mx-auto border-2 border-[#34D399] rounded-xl shadow-md shadow-[#34D399]">
-  <p-card header="Update profile">
-    <ng-template pTemplate="content">
-      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="space-y-5 mt-4">
-        <p-floatlabel variant="on">
-          <input type="text" pInputText id="on_label" fluid autocomplete="off" formControlName="firstName">
-          <label for="on_label">First Name</label>
-        </p-floatlabel>
-
-        <p-floatlabel variant="on">
-          <input type="text" pInputText id="on_label1" fluid autocomplete="off" formControlName="lastName">
-          <label for="on_label1">Last Name</label>
-        </p-floatlabel>
-
-        <p-floatlabel variant="on">
-          <input type="text" pInputText id="on_label2" fluid autocomplete="off" formControlName="email">
-          <label for="on_label2">Email</label>
-        </p-floatlabel>
-
-        <button pButton pRipple type="submit">Submit</button>
-      </form>
-
-      <button pButton pRipple severity="secondary" (click)="visible = true" icon="pi pi-arrow-right" class="mt-4">Update profile
-        picture
-      </button>
-
-      <p-drawer [(visible)]="visible" header="Update profile picture">
-        <div class="flex items-center justify-center flex-col">
-          <p-avatar [image]="accountService.currentUser()?.profile?.url" class="mr-2" size="xlarge"
-                    shape="circle" styleClass="mb-5 border-2 border-gray-600"></p-avatar>
-
-          <div class="flex items-center justify-center">
-            <p-fileupload #fu mode="basic" chooseLabel="Browse" chooseIcon="pi pi-upload" name="profileImage[]"
-                          [customUpload]="true" [auto]="true" accept="image/*" maxFileSize="1000000"
-                          (uploadHandler)="onUploadImage($event)"/>
-          </div>
+@if (user) {
+  <div class="text-white p-6 rounded-lg">
+    <div class="flex items-center gap-6">
+      <img [src]="user.profile?.url" class="rounded-full object-cover object-center h-36 w-36 border-4 border-gray-500"
+           alt="profile image"/>
+      <div class="flex-1">
+        <div class="flex items-center gap-4">
+          <h1 class="text-2xl font-bold">{{ user | name }}</h1>
+          <p-button [link]="true" icon="pi pi-cog" size="small" label="Edit profile"
+                    routerLink="/account/update-profile" class=""/>
         </div>
-      </p-drawer>
+        <div class="flex gap-6 mt-2 text-sm">
+          <span (click)="showDialog()" class="cursor-pointer">{{ followersLen }} Followers</span>
+          <span (click)="showFollowingDialog()" class="cursor-pointer">{{ followingLen }} Following</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <p-divider class="border-gray-700"></p-divider>
 
-    </ng-template>
+  <div class="grid grid-cols-3 gap-2 mt-4">
+    @for (folder of user.folders; track $index) {
+      <p-card routerLink="/folder/{{folder.id}}" class="relative overflow-hidden rounded-lg">
+        <div class="relative w-full h-14 flex items-center justify-center">
+          <span class="text-white font-semibold">{{ folder.name }}</span>
+        </div>
+        <div (click)="$event.stopPropagation()" class="absolute top-2 right-2">
+          <button pButton (click)="deleteFolder(folder.id)" class="text-white bg-red-500 p-1 rounded-full">
+            <i class="pi pi-trash"></i>
+          </button>
+        </div>
+      </p-card>
+    }
+  </div>
 
-    <p-toast key="br" position="bottom-right"></p-toast>
-  </p-card>
-</div>
+  <p-dialog header="Followers" [modal]="true" [(visible)]="followersVisible" [style]="{width: '25rem'}">
+    <ul class="text-white">
+      @for (follower of followers; track follower.id) {
+        @if (follower.email != accountService.currentUser()?.email) {
+          <li class="p-2 border-b border-gray-700">{{ follower | name }}</li>
+        }
+      }
+    </ul>
+  </p-dialog>
+
+  <p-dialog header="Following" [modal]="true" [(visible)]="followingVisible" [style]="{width: '25rem'}">
+    <ul class="text-white">
+      @for (follower of following; track follower.id) {
+        @if (follower.email != accountService.currentUser()?.email) {
+          <li class="p-2 border-b border-gray-700">{{ follower | name }}</li>
+        }
+      }
+    </ul>
+  </p-dialog>
+}

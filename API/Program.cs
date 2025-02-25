@@ -26,6 +26,8 @@ builder.Services.AddDbContext<ItemContext>(opt =>
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IStorageService, StorageService>();
+builder.Services.AddScoped<IFollowRepository, FollowRepository>();
+builder.Services.AddScoped<IUserFollowService, UserFollowService>();
 
 builder.Services.AddCors();
 

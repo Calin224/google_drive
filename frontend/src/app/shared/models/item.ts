@@ -14,6 +14,8 @@ export interface Item {
   downloadCount: number
   id: number
   folderId: number
+  isPublic: boolean
+  appUserId: string;
 }
 
 export interface Photo {

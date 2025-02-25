@@ -2,7 +2,7 @@ import {Component, inject, model, OnInit, signal} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ItemService} from '../../../core/services/item.service';
 import {Item} from '../../../shared/models/item';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PhotoService} from '../../../core/services/photo.service';
 import {CommonModule} from '@angular/common';
 import {SnackbarService} from '../../../core/services/snackbar.service';
@@ -25,8 +25,9 @@ import {ZipService} from '../../../core/services/zip.service';
 import {TableModule} from 'primeng/table';
 import {NgxExtendedPdfViewerModule} from 'ngx-extended-pdf-viewer';
 import {EditorService} from '../../../core/services/editor.service';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {Editor} from 'primeng/editor';
-import {ChangeDetectorRef} from '@angular/core';
+import {AccountService} from '../../../core/services/account.service';
 
 
 @Component({
@@ -51,8 +52,8 @@ import {ChangeDetectorRef} from '@angular/core';
     Button,
     TableModule,
     NgxExtendedPdfViewerModule,
-    Editor,
     FormsModule,
+    Editor,
   ],
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss'],
@@ -64,14 +65,22 @@ export class ItemComponent implements OnInit {
   private photoService = inject(PhotoService);
   private pdfService = inject(PdfService);
   private snackService = inject(SnackbarService);
+  protected accountService = inject(AccountService);
   private zipService = inject(ZipService);
   private editorService = inject(EditorService);
 
   itemId?: number;
   item?: Item;
 
-  constructor(private messageService: MessageService, private cdr: ChangeDetectorRef) {
-  }
+  toggle_item_public?: boolean;
+
+  private fb = inject(FormBuilder);
+
+  editorForm = this.fb.group({
+    text: new FormControl()
+  })
+
+  constructor(private messageService: MessageService) {}
 
   visible: boolean = false;
   visibleImages: boolean = false;
@@ -80,7 +89,6 @@ export class ItemComponent implements OnInit {
 
   items: MenuItem[] | undefined;
 
-  editorText: string | undefined;
   hasEditor?: boolean;
   visibleEditor: boolean = false;
 
@@ -149,6 +157,15 @@ export class ItemComponent implements OnInit {
     ]
   }
 
+  toggleItemPublic(itemId: number, isPublic: boolean){
+    this.itemService.setItemPublic(itemId, isPublic).subscribe({
+      next: () => {
+        this.toggle_item_public = !this.toggle_item_public;
+      },
+      error: err => console.log(err)
+    })
+  }
+
   loadItem() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (!id) return;
@@ -158,7 +175,8 @@ export class ItemComponent implements OnInit {
     this.itemService.getItem(+id).subscribe({
       next: item => {
         this.item = item;
-        console.log('Item:', item);
+        this.toggle_item_public = this.item.isPublic;
+        console.log(item.isPublic)
       }
     })
   }
@@ -273,7 +291,9 @@ export class ItemComponent implements OnInit {
   }
 
   uploadEditorText() {
-    this.editorService.uploadEditorText(this.itemId!, this.editorText!).subscribe({
+    const textValue = this.editorForm.get('text')?.value || '';
+
+    this.editorService.uploadEditorText(this.itemId!, textValue).subscribe({
       next: _ => {
         this.messageService.add({
           severity: 'success',
@@ -281,6 +301,7 @@ export class ItemComponent implements OnInit {
           detail: 'Editor text saved!',
           life: 3000
         });
+        this.loadItem();
       },
       error: error => {
         console.log(error.Message)
@@ -289,10 +310,9 @@ export class ItemComponent implements OnInit {
   }
 
   editEditorText() {
-    this.editorText = this.item?.editor?.text;
-    this.editorService.editEditorText(this.itemId!, this.editorText!).subscribe({
+    const textValue = this.editorForm.get('text')?.value || '';
+    this.editorService.editEditorText(this.itemId!, textValue).subscribe({
       next: _ => {
-        this.cdr.detectChanges();
         this.messageService.add({
           severity: 'success',
           summary: 'Success',

@@ -40,7 +40,16 @@ public class EditorController(IGenericRepository<Item> itemRepo) : BaseApiContro
         var item = await itemRepo.GetEntityWithSpec(spec);
         if(item == null) return NotFound();
 
-        item.Editor!.Text = editorDto.Text;
+        // item.Editor!.Text = editorDto.Text;
+        if (item.Editor == null)
+        {
+            item.Editor = new Editor
+            {
+                Text = null
+            };
+        }
+
+        item.Editor.Text = editorDto.Text;
 
         if (await itemRepo.SaveAllAsync())
             return NoContent();
@@ -54,8 +63,11 @@ public class EditorController(IGenericRepository<Item> itemRepo) : BaseApiContro
         var spec = new ItemSpecification(itemId);
         var item = await itemRepo.GetEntityWithSpec(spec);
         if (item == null) return NotFound();
-        
-        item.Editor = null;
+
+        if (item.Editor?.Text != "")
+        {
+            if (item.Editor != null) item.Editor.Text = "";
+        }
         if (await itemRepo.SaveAllAsync()) return NoContent();
         
         return BadRequest("Cannot delete editor text");
@@ -68,9 +80,6 @@ public class EditorController(IGenericRepository<Item> itemRepo) : BaseApiContro
         var item = await itemRepo.GetEntityWithSpec(spec);
         if (item == null) return NotFound();
 
-        return Ok(new
-        {
-            HasEditor = item.Editor != null
-        });
+        return Ok(item.Editor != null);
     }
 }

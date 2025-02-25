@@ -1,0 +1,10 @@
+@for (item of items; track item.id) {
+  <p-card header="{{item.name}}" subheader="{{item.category}}" routerLink="/item/{{item.id}}">
+
+    <ng-template pTemplate="footer">
+      <div (click)="$event.stopPropagation()">
+      </div>
+    </ng-template>
+
+  </p-card>
+}

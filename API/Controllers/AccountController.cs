@@ -23,7 +23,7 @@ namespace API.Controllers
 
             var res = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
 
-            if(!res.Succeeded) 
+            if (!res.Succeeded)
             {
                 foreach (var error in res.Errors)
                 {
@@ -55,6 +55,7 @@ namespace API.Controllers
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
+
                 return ValidationProblem();
             }
 
@@ -83,18 +84,38 @@ namespace API.Controllers
         [HttpGet("user-info")]
         public async Task<ActionResult> GetUserInfo()
         {
-            if(User.Identity?.IsAuthenticated == false) return NoContent();
+            if (User.Identity?.IsAuthenticated == false) return NoContent();
             var user = await signInManager.UserManager.Users
                 .Include(x => x.Profile)
+                .Include(x => x.Folders)
                 .FirstOrDefaultAsync(x => x.Email == User.Identity!.Name);
 
-            return Ok(new 
+            return Ok(new
             {
                 user!.FirstName,
                 user.LastName,
                 user.Email,
-                user.Profile
-            });   
+                user.Profile,
+                user.Id,
+                user.Folders
+            });
+        }
+
+        [HttpGet("all-users")]
+        public async Task<ActionResult<IReadOnlyList<AppUser>>> GetAllUsers()
+        {
+            var users = await signInManager.UserManager.Users
+                .ToListAsync();
+
+            var user = await signInManager.UserManager.GetUserByEmail(User);
+
+            return Ok(users.Where(x => user.Id != x.Id).Select(x => new
+            {
+                x.FirstName,
+                x.LastName,
+                x.Email,
+                x.Id
+            }));
         }
     }
 }

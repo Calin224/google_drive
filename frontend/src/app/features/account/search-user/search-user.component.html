@@ -1,0 +1,9 @@
+<p-listbox [options]="users!" optionLabel="firstName" [filter]="true" class="w-full md:w-56">
+  <ng-template let-user pTemplate="item">
+    <div class="flex justify-between w-full items-center">
+      <div class="p-mr-2">{{ user.firstName }} {{ user.lastName }}</div>
+      <button *ngIf="!isFollowing[user.id]" (click)="followUser(user.id)" pButton pRipple>Follow</button>
+      <button *ngIf="isFollowing[user.id]" (click)="followUser(user.id)" severity="secondary" pButton pRipple>Unfollow</button>
+    </div>
+  </ng-template>
+</p-listbox>

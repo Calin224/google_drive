@@ -1,4 +1,5 @@
 import {Folder} from "./folder";
+import {UserFollow} from './userFollow';
 
 interface Profile {
   url: string
@@ -11,6 +12,9 @@ export type User = {
   firstName: string;
   lastName: string;
   email: string;
+  id: string;
   folders: Folder[]
   profile: Profile
+  followedByUsers: UserFollow[]
+  followedUser: UserFollow[]
 }

@@ -49,80 +49,70 @@
           </ng-template>
         </p-fileupload>
 
-<!--        <div class="">-->
-<!--          @for (zip of item.zips; track zip.id) {-->
-<!--            <div class="">-->
 
-<!--              <div>{{ zip.fileName }}</div>-->
+        @if (item.zips!.length > 0) {
+          <div class="overflow-x-auto w-full">
+            <table class="table w-full">
+              <thead>
+              <tr>
+                <th></th>
+                <th>File Name</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody class="space-y-3">
+                @for (zip of item.zips; track zip.id) {
+                  <tr class="bg-base-200 text-center">
+                    <th>{{ zip.id }}</th>
+                    <td>{{ zip.fileName }}</td>
+                    <td class="flex gap-3 items-center justify-center">
+                      <a pButton [href]="zip.blobUrl">
+                        <i class="pi pi-download"></i>
+                        Downlaod
+                      </a>
 
-<!--              <div class="">-->
-
-<!--                <a pButton [href]="zip.blobUrl">-->
-<!--                  <i class="pi pi-download"></i>-->
-<!--                  Downlaod-->
-<!--                </a>-->
-
-<!--                <button pButton pRipple (click)="deleteZip(zip.id)" severity="secondary">-->
-<!--                  <i class="pi pi-trash"></i>-->
-<!--                </button>-->
-
-<!--              </div>-->
-<!--            </div>-->
-<!--          }-->
-<!--        </div>-->
-
-        <div class="overflow-x-auto w-full">
-          <table class="table w-full">
-            <thead>
-            <tr>
-              <th></th>
-              <th>File Name</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody class="space-y-3">
-              @for (zip of item.zips; track zip.id) {
-                <tr class="bg-base-200 text-center">
-                  <th>{{ zip.id }}</th>
-                  <td>{{ zip.fileName }}</td>
-                  <td class="flex gap-3 items-center justify-center">
-                    <a pButton [href]="zip.blobUrl">
-                      <i class="pi pi-download"></i>
-                      Downlaod
-                    </a>
-
-                    <button pButton pRipple (click)="deleteZip(zip.id)" severity="secondary">
-                      <i class="pi pi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+                      <button pButton pRipple (click)="deleteZip(zip.id)" severity="secondary">
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
 
       } @else if (isEditor) {
-        @if (hasEditor == false) {
-          <div>
-            <p-editor [(ngModel)]="editorText" [style]="{height: '300px'}"></p-editor>
-            <button pButton (click)="uploadEditorText()">Post</button>
-          </div>
-        } @else if (hasEditor) {
+        @if (!hasEditor) {
+          <form [formGroup]="editorForm">
+            <p-editor formControlName="text"></p-editor>
+          </form>
+
+          <p-button (click)="editEditorText()" label="Upload"></p-button>
+        } @else {
           <div>
             @if (!visibleEditor) {
-              <p-editor [(ngModel)]="item.editor!.text" [readonly]="true" [style]="{height: '300px'}"></p-editor>
+              <p-editor [(ngModel)]="item.editor!.text"/>
               <button pButton (click)="visibleEditor = true">Edit</button>
             }
 
             @if (visibleEditor) {
-              <p-editor [(ngModel)]="item.editor!.text" [style]="{height: '300px'}"></p-editor>
-              <button pButton (click)="editEditorText()">Update</button>
+              <form [formGroup]="editorForm">
+                <p-editor formControlName="text"></p-editor>
+              </form>
+
+              <p-button (click)="editEditorText()" label="Upload"></p-button>
             }
 
             <button pButton pRipple (click)="deleteEditorText()">Clear Text</button>
-
             <button pButton pRipple (click)="cancelEditorEdit()">Cancel</button>
           </div>
+        }
+
+        @if (hasEditor) {
+          <p-editor [(ngModel)]="item.editor!.text" [readonly]="true">
+            <ng-template pTemplate="header"></ng-template>
+          </p-editor>
         }
       }
     </div>
@@ -130,6 +120,18 @@
     <div class="mt-3">
       <div class="flex gap-4">
         <div>
+          @if (accountService.currentUser()?.id == item.appUserId) {
+            @if (toggle_item_public) {
+              <p-button (click)="toggleItemPublic(itemId!, !toggle_item_public)">
+                Make Private
+              </p-button>
+            } @else {
+              <p-button (click)="toggleItemPublic(itemId!, !toggle_item_public)">
+                Make Public
+              </p-button>
+            }
+          }
+
           <p-drawer header="{{item.name}}'s pdfs" [(visible)]="visible" position="full">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 

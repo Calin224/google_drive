@@ -13,10 +13,14 @@ namespace Core.Entities
         public Editor? Editor { get; set; }
 
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
-        public int DownloadCount { get; set; } = 0;   
-        
+        public int DownloadCount { get; set; } = 0;
 
+
+        public string AppUserId { get; set; } = string.Empty;
+        
         public int FolderId { get; set; }
         public Folder? Folder { get; set; }
+
+        public bool IsPublic { get; set; } = false; // default must be set to false
     }
 }

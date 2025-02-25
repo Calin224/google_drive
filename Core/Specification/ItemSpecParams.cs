@@ -33,5 +33,8 @@
             get => _search ?? "";
             set => _search = value.ToLower();
         }
+
+        public string? UserId { get; set; }
+        public List<string> MutualFollowerIds { get; set; } = new();
     }
 }

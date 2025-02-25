@@ -9,7 +9,7 @@ import {Drawer} from 'primeng/drawer';
 import {StyleClass} from 'primeng/styleclass';
 import {Ripple} from 'primeng/ripple';
 import {NgClass} from '@angular/common';
-import {ButtonDirective, ButtonIcon} from 'primeng/button';
+import {Button, ButtonDirective, ButtonIcon} from 'primeng/button';
 import {Menu} from 'primeng/menu';
 import {BusyService} from '../../core/services/busy.service';
 import {ProgressBar} from 'primeng/progressbar';
@@ -23,12 +23,11 @@ import {NamePipe} from '../../shared/pipes/name.pipe';
     RouterLink,
     Ripple,
     NgClass,
-    ButtonDirective,
     Menu,
-    ButtonIcon,
     ProgressBar,
     Avatar,
     NamePipe,
+    Button,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -74,6 +73,11 @@ export class HeaderComponent implements OnInit{
         label: 'Profile',
         icon: 'pi pi-user',
         command: () => this.router.navigateByUrl('/profile')
+      },
+      {
+        label: 'All users',
+        icon: 'pi pi-users',
+        command: () => this.router.navigateByUrl('/account/search-user')
       },
       {
         label: 'Logout',

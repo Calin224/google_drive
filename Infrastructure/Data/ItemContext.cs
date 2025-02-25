@@ -7,6 +7,7 @@ namespace Infrastructure.Data
     public class ItemContext(DbContextOptions options) : IdentityDbContext<AppUser>(options)
     {
         public DbSet<Item> Items { get; set; }
+        public DbSet<UserFollow> Follows { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +61,21 @@ namespace Infrastructure.Data
                 .HasForeignKey<Editor>(e => e.ItemId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
+
+            modelBuilder.Entity<UserFollow>()
+                .HasKey(k => new { k.SourceUserId, k.TargetUserId });
+
+            modelBuilder.Entity<UserFollow>()
+                .HasOne(s => s.SourceUser)
+                .WithMany(l => l.FollowedUsers)
+                .HasForeignKey(s => s.SourceUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<UserFollow>()
+                .HasOne(s => s.TargetUser)
+                .WithMany(l => l.FollowedByUsers)
+                .HasForeignKey(s => s.TargetUserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

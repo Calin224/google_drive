@@ -1,10 +1,11 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { ItemParams } from '../../shared/models/itemParams';
-import { Pagination } from '../../shared/models/pagination';
-import { Item } from '../../shared/models/item';
-import { AccountService } from './account.service';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {ItemParams} from '../../shared/models/itemParams';
+import {Pagination} from '../../shared/models/pagination';
+import {Item} from '../../shared/models/item';
+import {AccountService} from './account.service';
 import {map, of, tap} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class ItemService {
   baseUrl = 'https://localhost:7207/api/';
   private http = inject(HttpClient);
   private accountService = inject(AccountService);
+
   categories: string[] = [];
 
   getItems(itemParams: ItemParams) {
@@ -21,7 +23,7 @@ export class ItemService {
     params = params.append('pageSize', itemParams.pageSize);
     params = params.append('pageIndex', itemParams.pageNumber);
 
-    if(itemParams.categories && itemParams.categories.length > 0) {
+    if (itemParams.categories && itemParams.categories.length > 0) {
       params = params.append('categories', itemParams.categories.join(','));
     }
 
@@ -29,24 +31,24 @@ export class ItemService {
       params = params.set('folderId', itemParams.folderId.toString());
     }
 
-    if(itemParams.sort){
+    if (itemParams.sort) {
       params = params.append('sort', itemParams.sort);
     }
 
-    if(itemParams.search){
+    if (itemParams.search) {
       params = params.append('search', itemParams.search);
     }
 
     return this.http.get<Pagination<Item>>(this.baseUrl + 'items', {params});
   }
 
+  getPublicItemsForUser(){
+    return this.http.get<Item[]>(this.baseUrl + 'items/public-for-user');
+  }
+
   getItem(id: number) {
-    const user = this.accountService.currentUser();
-    if(!user){
-      throw new Error('User not found');
-    }
     return this.http.get<Item>(this.baseUrl + 'items/' + id);
-}
+  }
 
   createItem(item: Partial<Item>, folderId: number) {
     item.folderId = folderId;
@@ -71,5 +73,9 @@ export class ItemService {
     );
   }
 
-
+  setItemPublic(itemId: number, isPublic: boolean) {
+    return this.http.post(this.baseUrl + 'items/set-public/' + itemId, isPublic).pipe(
+      tap(() => console.log(`Item ${itemId} set to ${isPublic ? 'Public' : 'Private'}`))
+    )
+  }
 }

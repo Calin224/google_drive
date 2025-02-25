@@ -14,20 +14,13 @@
     @if(accountService.currentUser()){
       <div class="flex items-center gap-2">
         <p-menu #menu [model]="its" [popup]="true"></p-menu>
-        <button pButton (click)="menu.toggle($event)">{{accountService.currentUser() | name}}</button>
+        <p-button label="{{accountService.currentUser() | name}}" (click)="menu.toggle($event)" variant="text"></p-button>
         <p-avatar image="{{accountService.currentUser()?.profile?.url}}" shape="circle"></p-avatar>
       </div>
     }@else{
       <div class="flex items-center gap-2">
-        <button pButton pButtonIcon pRipple routerLink="/account/login">
-          <i class="pi pi-user"></i>
-          Login
-        </button>
-
-        <button pButton pButtonIcon pRipple severity="secondary" routerLink="/account/register">
-          <i class="pi pi-user-plus"></i>
-          Register
-        </button>
+        <p-button icon="pi pi-user" routerLink="/account/login" label="Login"></p-button>
+        <p-button severity="secondary" icon="pi pi-user-plus" routerLink="/account/register" label="Register"></p-button>
       </div>
     }
   </ng-template>
