@@ -10,8 +10,6 @@ export class InitService {
   private accountService = inject(AccountService);
 
   init() {
-    // const userId = localStorage.getItem('user_id');
-
     this.accountService.getUserInfo().subscribe();
     return of(true);
   }

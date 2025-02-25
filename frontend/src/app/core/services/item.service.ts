@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
   providedIn: 'root'
 })
 export class ItemService {
-  baseUrl = 'https://localhost:7207/api/';
+  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
   private http = inject(HttpClient);
   private accountService = inject(AccountService);
 

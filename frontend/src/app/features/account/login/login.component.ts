@@ -10,6 +10,7 @@ import {Button} from 'primeng/button';
 import {IftaLabel} from 'primeng/iftalabel';
 import {Card} from 'primeng/card';
 import {InputText} from 'primeng/inputtext';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ import {InputText} from 'primeng/inputtext';
     IftaLabel,
     Card,
     InputText,
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

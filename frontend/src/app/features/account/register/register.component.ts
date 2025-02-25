@@ -12,6 +12,7 @@ import {Card} from 'primeng/card';
 import {IftaLabel} from 'primeng/iftalabel';
 import {InputText} from 'primeng/inputtext';
 import {Button} from 'primeng/button';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +30,8 @@ import {Button} from 'primeng/button';
     Card,
     IftaLabel,
     InputText,
-    Button
+    Button,
+    NgIf
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',

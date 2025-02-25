@@ -6,7 +6,7 @@ import {Item, Photo} from '../../shared/models/item';
   providedIn: 'root'
 })
 export class PhotoService {
-  baseUrl = 'https://localhost:7207/api/';
+  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
   private http = inject(HttpClient);
 
   addPhotos(itemId: number, files: File[]) {

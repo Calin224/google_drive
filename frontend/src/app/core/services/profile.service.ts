@@ -9,7 +9,7 @@ import {User} from '../../shared/models/user';
 })
 export class ProfileService {
   private accountService = inject(AccountService);
-  baseUrl = 'https://localhost:7207/api/';
+  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
   private http = inject(HttpClient);
 
   addProfilePicture(file: File){

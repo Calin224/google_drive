@@ -6,7 +6,7 @@ import {Editor, EditorDto} from '../../shared/models/editor';
   providedIn: 'root'
 })
 export class EditorService {
-  baseUrl = 'https://localhost:7207/api/';
+  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
   private http = inject(HttpClient);
 
   uploadEditorText(itemId: number, text: string){

@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class PdfService {
-  baseUrl = 'https://localhost:7207/api/';
+  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
   private http = inject(HttpClient);
 
   addPdf(itemId: number, files: File[]){

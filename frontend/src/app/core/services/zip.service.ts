@@ -6,7 +6,7 @@ import {Zip} from '../../shared/models/zip';
   providedIn: 'root'
 })
 export class ZipService {
-  baseUrl = 'https://localhost:7207/api/';
+  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
   private http = inject(HttpClient);
 
   uploadZip(itemId: number, file: File){

@@ -11,13 +11,9 @@ import {TrashIcon} from 'primeng/icons';
 @Component({
   selector: 'app-public-items',
   imports: [
-    Button,
-    ButtonIcon,
     Card,
     PrimeTemplate,
-    Ripple,
     RouterLink,
-    TrashIcon
   ],
   templateUrl: './public-items.component.html',
   styleUrl: './public-items.component.css'

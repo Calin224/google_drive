@@ -8,7 +8,7 @@ import {FolderParams} from '../../shared/models/folderParams';
   providedIn: 'root'
 })
 export class FolderService {
-  baseUrl = 'https://localhost:7207/api/';
+  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
   private http = inject(HttpClient);
 
   getFolders(folderParams: FolderParams) {

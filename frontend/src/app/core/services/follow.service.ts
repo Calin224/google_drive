@@ -6,7 +6,7 @@ import {User} from '../../shared/models/user';
   providedIn: 'root'
 })
 export class FollowService {
-  baseUrl = 'https://localhost:7207/api/';
+  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
   private http = inject(HttpClient);
 
   toggleFollow(targetUserId: string){
