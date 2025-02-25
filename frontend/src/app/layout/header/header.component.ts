@@ -65,6 +65,11 @@ export class HeaderComponent implements OnInit{
         label: 'Threads',
         icon: 'pi pi-list',
         href: '/folders'
+      },
+      {
+        label: 'Public Items',
+        icon: 'pi pi-objects-column',
+        href: '/public-items'
       }
     ]
 

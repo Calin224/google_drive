@@ -7,7 +7,8 @@ public class FolderSpecification : BaseSpecification<Folder>
 {
     public FolderSpecification(FolderSpecParams specParams)
         : base(x =>
-            (string.IsNullOrEmpty(specParams.AppUserId) || x.AppUserId == specParams.AppUserId)
+            (string.IsNullOrEmpty(specParams.AppUserId) || x.AppUserId == specParams.AppUserId) &&
+            (string.IsNullOrEmpty(specParams.Search) || x.Name.ToLower().Contains(specParams.Search))
         )
     {
         AddInclude(x => x.Items);

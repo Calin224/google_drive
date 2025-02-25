@@ -1,4 +1,4 @@
-import {Component, inject, model, OnInit, signal} from '@angular/core';
+import {Component, effect, inject, model, OnDestroy, OnInit, signal} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ItemService} from '../../../core/services/item.service';
 import {Item} from '../../../shared/models/item';
@@ -28,6 +28,7 @@ import {EditorService} from '../../../core/services/editor.service';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {Editor} from 'primeng/editor';
 import {AccountService} from '../../../core/services/account.service';
+import {SignalrService} from '../../../core/services/signalr.service';
 
 
 @Component({
@@ -59,7 +60,7 @@ import {AccountService} from '../../../core/services/account.service';
   styleUrls: ['./item.component.scss'],
   providers: [MessageService]
 })
-export class ItemComponent implements OnInit {
+export class ItemComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private itemService = inject(ItemService);
   private photoService = inject(PhotoService);
@@ -68,6 +69,7 @@ export class ItemComponent implements OnInit {
   protected accountService = inject(AccountService);
   private zipService = inject(ZipService);
   private editorService = inject(EditorService);
+  private signalrService = inject(SignalrService);
 
   itemId?: number;
   item?: Item;
@@ -80,7 +82,8 @@ export class ItemComponent implements OnInit {
     text: new FormControl()
   })
 
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService) {
+  }
 
   visible: boolean = false;
   visibleImages: boolean = false;
@@ -97,8 +100,31 @@ export class ItemComponent implements OnInit {
   isZip: boolean = false;
   isEditor: boolean = false;
 
+  ngOnDestroy() {
+    this.signalrService.stopHubConnection();
+  }
+
+  setupSignalRConnection(){
+    this.signalrService.createHubConnection();
+
+    this.signalrService.itemSignal().subscribe(updatedItem => {
+      if (updatedItem && updatedItem.id === this.itemId) {
+        this.item = updatedItem;
+        this.toggle_item_public = updatedItem.isPublic;
+
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Item Updated',
+          detail: `The item "${updatedItem.name}" has been updated`,
+          life: 3000
+        });
+      }
+    });
+  }
+
   ngOnInit() {
     this.loadItem();
+    this.setupSignalRConnection();
 
     this.editorService.hasEditor(this.itemId!).subscribe({
       next: res => {
@@ -157,7 +183,7 @@ export class ItemComponent implements OnInit {
     ]
   }
 
-  toggleItemPublic(itemId: number, isPublic: boolean){
+  toggleItemPublic(itemId: number, isPublic: boolean) {
     this.itemService.setItemPublic(itemId, isPublic).subscribe({
       next: () => {
         this.toggle_item_public = !this.toggle_item_public;

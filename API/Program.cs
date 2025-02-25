@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using API.SignalR;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddScoped<IFollowRepository, FollowRepository>();
 builder.Services.AddScoped<IUserFollowService, UserFollowService>();
+builder.Services.AddSignalR();
 
 builder.Services.AddCors();
 
@@ -63,5 +65,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapGroup("api").MapIdentityApi<AppUser>();
+app.MapHub<NotificationHub>("/hub/nitifications");
 
 app.Run();

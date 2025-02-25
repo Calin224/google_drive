@@ -15,7 +15,7 @@
       <div class="flex items-center gap-2">
         <p-menu #menu [model]="its" [popup]="true"></p-menu>
         <p-button label="{{accountService.currentUser() | name}}" (click)="menu.toggle($event)" variant="text"></p-button>
-        <p-avatar image="{{accountService.currentUser()?.profile?.url}}" shape="circle"></p-avatar>
+        <p-avatar image="{{accountService.currentUser()?.profile?.url || 'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg'}}" shape="circle"></p-avatar>
       </div>
     }@else{
       <div class="flex items-center gap-2">

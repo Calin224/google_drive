@@ -5,7 +5,7 @@ import {Folder} from '../../../shared/models/folder';
 import { MatDialog } from '@angular/material/dialog';
 import {CreateItemComponent} from '../../../shared/dialogs/create-item/create-item.component';
 import {NgFor, NgIf} from '@angular/common';
-import {Button, ButtonDirective, ButtonIcon} from 'primeng/button';
+import {Button, ButtonDirective, ButtonIcon, ButtonLabel} from 'primeng/button';
 import {Ripple} from 'primeng/ripple';
 import { ItemService } from '../../../core/services/item.service';
 import { ItemParams } from '../../../shared/models/itemParams';
@@ -40,7 +40,8 @@ import {InputText} from 'primeng/inputtext';
     ButtonIcon,
     IconField,
     InputIcon,
-    InputText
+    InputText,
+    ButtonLabel
   ],
   templateUrl: './folder.component.html',
   styleUrl: './folder.component.css'

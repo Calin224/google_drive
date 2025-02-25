@@ -7,6 +7,11 @@ import {MatInput} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from '@angular/material/card';
 import {Router, RouterLink} from '@angular/router';
+import {MessageService} from 'primeng/api';
+import {Card} from 'primeng/card';
+import {IftaLabel} from 'primeng/iftalabel';
+import {InputText} from 'primeng/inputtext';
+import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-register',
@@ -20,10 +25,15 @@ import {Router, RouterLink} from '@angular/router';
     MatCard,
     MatCardActions,
     MatCardContent,
-    RouterLink
+    RouterLink,
+    Card,
+    IftaLabel,
+    InputText,
+    Button
   ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
+  providers: [MessageService]
 })
 export class RegisterComponent {
   private fb = inject(FormBuilder);
@@ -32,17 +42,19 @@ export class RegisterComponent {
   private router = inject(Router);
   validationErrors: string[] = [];
 
+  constructor(private messageService: MessageService) {  }
+
   registerForm = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required]],
   })
 
   onSubmit(){
     this.accountService.register(this.registerForm.value).subscribe({
       next: () => {
-        this.snackbarService.success("Registration successful");
+        this.messageService.add({severity: 'success', summary:"Success!", detail: "Registration successful!", life:3000});
         this.router.navigateByUrl('/account/login');
       },
       error: errors => this.validationErrors = errors

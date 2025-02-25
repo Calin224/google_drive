@@ -18,7 +18,7 @@ export const routes: Routes = [
   {path: 'folders', component: FolderListComponent, canActivate: [authGuard]},
   {path: 'folder/:id', component: FolderComponent, canActivate: [authGuard]},
   {path: 'items', component: ItemsComponent, canActivate: [authGuard]},
-  {path: 'item/:id', component: ItemComponent, canActivate: [authGuard, mutualFriendGuard]},
+  {path: 'item/:id', component: ItemComponent, canActivate: [authGuard]},
   {path: 'account/login', component: LoginComponent},
   {path: 'account/register', component: RegisterComponent},
   {path: 'account/search-user', component: SearchUserComponent},

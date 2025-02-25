@@ -3,7 +3,7 @@ import { FolderService } from '../../core/services/folder.service';
 import { Folder } from '../../shared/models/folder';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateFolderComponent } from '../../shared/dialogs/create-folder/create-folder.component';
-import {ButtonDirective, ButtonIcon, ButtonLabel} from 'primeng/button';
+import {Button, ButtonDirective, ButtonIcon, ButtonLabel} from 'primeng/button';
 import {Ripple} from 'primeng/ripple';
 import {Card} from 'primeng/card';
 import {RouterLink} from '@angular/router';
@@ -11,10 +11,14 @@ import {FolderParams} from '../../shared/models/folderParams';
 import {Pagination} from '../../shared/models/pagination';
 import {Paginator} from 'primeng/paginator';
 import {MultiSelect} from 'primeng/multiselect';
-import {PlusIcon} from 'primeng/icons';
-import {PrimeTemplate} from 'primeng/api';
+import {PlusIcon, TrashIcon} from 'primeng/icons';
+import {MessageService, PrimeTemplate} from 'primeng/api';
 import {BusyService} from '../../core/services/busy.service';
 import {Skeleton} from 'primeng/skeleton';
+import {IconField} from 'primeng/iconfield';
+import {InputIcon} from 'primeng/inputicon';
+import {InputText} from 'primeng/inputtext';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-folder-list',
@@ -26,14 +30,26 @@ import {Skeleton} from 'primeng/skeleton';
     RouterLink,
     Paginator,
     Skeleton,
+    IconField,
+    InputIcon,
+    InputText,
+    ReactiveFormsModule,
+    FormsModule,
+    Button,
+    PrimeTemplate,
+    ButtonIcon,
+    TrashIcon,
   ],
   templateUrl: './folder-list.component.html',
-  styleUrl: './folder-list.component.css'
+  styleUrl: './folder-list.component.css',
+  providers: [MessageService]
 })
 export class FolderListComponent implements OnInit {
   private folderService = inject(FolderService);
   readonly dialog = inject(MatDialog);
   busyService = inject(BusyService);
+
+  constructor(private messageService: MessageService) { }
 
   folders?: Pagination<Folder>;
 
@@ -59,12 +75,17 @@ export class FolderListComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(CreateFolderComponent);
+    this.dialog.open(CreateFolderComponent);
   }
 
   handlePageEvent($event: any) {
     this.folderParams.pageNumber = $event.page! + 1;
     this.folderParams.pageSize = $event.rows!;
+    this.loadFolders();
+  }
+
+  changeFn(event: any) {
+    this.folderParams.search = event;
     this.loadFolders();
   }
 }

@@ -24,7 +24,7 @@
       } @else if (isPdf) {
         <div class="">
           <p-fileupload name="pdfs[]" [customUpload]="true" (uploadHandler)="onUploadPdf($event)" [multiple]="true"
-                        accept="application/pdf" mode="advanced">
+                        accept="application/pdf" maxFileSize="1000000" mode="advanced">
             <ng-template #empty>
               <div>Drag and drop pdfs to here to upload.</div>
             </ng-template>
@@ -37,7 +37,7 @@
         </div>
       } @else if (isZip) {
         <p-fileupload name="zips[]" [customUpload]="true" (uploadHandler)="onUploadZip($event)" [multiple]="false"
-                      accept=".zip,application/zip"
+                      accept=".zip,application/zip" maxFileSize="1000000"
                       mode="advanced">
           <ng-template #empty>
             <div>Drag and drop zip files here to upload.</div>
@@ -118,20 +118,21 @@
     </div>
 
     <div class="mt-3">
+      <div class="mb-3">
+        @if (accountService.currentUser()?.id == item.appUserId) {
+          @if (toggle_item_public) {
+            <p-button (click)="toggleItemPublic(itemId!, !toggle_item_public)">
+              Make Private
+            </p-button>
+          } @else {
+            <p-button (click)="toggleItemPublic(itemId!, !toggle_item_public)">
+              Make Public
+            </p-button>
+          }
+        }
+      </div>
       <div class="flex gap-4">
         <div>
-          @if (accountService.currentUser()?.id == item.appUserId) {
-            @if (toggle_item_public) {
-              <p-button (click)="toggleItemPublic(itemId!, !toggle_item_public)">
-                Make Private
-              </p-button>
-            } @else {
-              <p-button (click)="toggleItemPublic(itemId!, !toggle_item_public)">
-                Make Public
-              </p-button>
-            }
-          }
-
           <p-drawer header="{{item.name}}'s pdfs" [(visible)]="visible" position="full">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 

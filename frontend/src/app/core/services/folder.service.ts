@@ -17,6 +17,10 @@ export class FolderService {
     params = params.append('pageSize', folderParams.pageSize);
     params = params.append('pageIndex', folderParams.pageNumber);
 
+    if(folderParams.search){
+      params = params.append('search', folderParams.search);
+    }
+
     if(folderParams.appUserId){
       params = params.set('appUserId', folderParams.appUserId);
     }

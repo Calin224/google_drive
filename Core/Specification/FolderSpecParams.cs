@@ -13,5 +13,12 @@ public class FolderSpecParams
         set => pageSize = (value > MaxPageSize) ? MaxPageSize : value;
     }
 
+    public string? _search;
+    public string Search
+    {
+        get => _search ?? "";
+        set => _search = value.ToLower();
+    }
+
     public string? AppUserId { get; set; }
 }

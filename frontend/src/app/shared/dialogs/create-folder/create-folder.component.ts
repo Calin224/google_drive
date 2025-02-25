@@ -10,6 +10,7 @@ import {Ripple} from 'primeng/ripple';
 import {Card} from 'primeng/card';
 import {FolderService} from '../../../core/services/folder.service';
 import {MatDialogRef} from '@angular/material/dialog';
+import {MessageService} from 'primeng/api';
 
 
 @Component({
@@ -22,7 +23,8 @@ import {MatDialogRef} from '@angular/material/dialog';
     ButtonDirective
   ],
   templateUrl: './create-folder.component.html',
-  styleUrl: './create-folder.component.css'
+  styleUrl: './create-folder.component.css',
+  providers: [MessageService]
 })
 export class CreateFolderComponent {
   private fb = inject(FormBuilder);
@@ -30,6 +32,9 @@ export class CreateFolderComponent {
   private router = inject(Router);
   protected dialogRef = inject(MatDialogRef<CreateFolderComponent>);
   private accountService = inject(AccountService);
+
+  constructor(private messageService: MessageService) {
+  }
 
   isSubmitting = false;
 
@@ -48,6 +53,7 @@ export class CreateFolderComponent {
 
       this.folderService.createFolder(folder).subscribe({
         next: response => {
+          this.messageService.add({severity: 'success', summary:'Success', detail:"Thread created successfully!", life: 3000})
           this.router.navigateByUrl('/folder/' + response.id);
           this.dialogRef.close('created');
         },

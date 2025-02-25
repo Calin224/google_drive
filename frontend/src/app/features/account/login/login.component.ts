@@ -1,11 +1,15 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { AccountService } from '../../../core/services/account.service';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { MatCard } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
+import {Button} from 'primeng/button';
+import {IftaLabel} from 'primeng/iftalabel';
+import {Card} from 'primeng/card';
+import {InputText} from 'primeng/inputtext';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +19,12 @@ import { MatButton } from '@angular/material/button';
     ReactiveFormsModule,
     MatLabel,
     MatInput,
-    MatButton
+    MatButton,
+    Button,
+    IftaLabel,
+    Card,
+    InputText,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
