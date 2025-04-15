@@ -1,11 +1,12 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PdfService {
-  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
+  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
   addPdf(itemId: number, files: File[]){

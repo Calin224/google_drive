@@ -1,12 +1,13 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {User} from '../../shared/models/user';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FollowService {
-  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
+  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
   toggleFollow(targetUserId: string){

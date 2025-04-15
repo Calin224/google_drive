@@ -1,4 +1,4 @@
-<p-menubar [model]="items" styleClass="">
+<!-- <p-menubar [model]="items" styleClass="">
   <ng-template pTemplate="start">
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
       <defs><linearGradient id="rLJlwOCtFGybrKyNT3989a_BTZ3w6agexne_gr1" x1="23.999" x2="23.999" y1="2197.682" y2="2191.189" data-name="ÐÐµÐ·ÑÐ¼ÑÐ½Ð½ÑÐ¹ Ð³ÑÐ°Ð´Ð¸ÐµÐ½Ñ 258" gradientTransform="translate(0 -2154)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#c26715"></stop><stop offset=".508" stop-color="#b85515"></stop><stop offset="1" stop-color="#ad3f16"></stop></linearGradient></defs><path fill="url(#rLJlwOCtFGybrKyNT3989a_BTZ3w6agexne_gr1)" d="M20.999,35h6v8a1.00036,1.00036,0,0,1-1,1h-4a1.00036,1.00036,0,0,1-1-1Z"></path><path fill="#107c42" d="M23.99695,12.873,9.312,34.239A1.76174,1.76174,0,0,0,10.763,37H37.235a1.75942,1.75942,0,0,0,1.451-2.757Z"></path><path fill="#21a366" d="M23.999,7.839,13.286,24.301A1.74559,1.74559,0,0,0,14.751,27H33.247a1.74789,1.74789,0,0,0,1.465-2.703Z"></path><path fill="#33c481" d="M22.61316,4.316l-5.374,9.11A1.70534,1.70534,0,0,0,18.70716,16h10.582a1.70922,1.70922,0,0,0,1.472-2.575l-5.374-9.11A1.61166,1.61166,0,0,0,22.61316,4.316Z"></path>
@@ -25,6 +25,69 @@
     }
   </ng-template>
 </p-menubar>
+
+
+@if(busyService.loading){
+  <p-progressbar mode="indeterminate" [style]="{ height: '6px' }"></p-progressbar>
+}
+ -->
+
+ <header class="flex justify-between items-center px-6 py-3 border-b-2 border-[#6EE7B7] shadow-md">
+  <div class="flex items-center gap-3">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+      <defs>
+        <linearGradient id="grad" x1="23.999" x2="23.999" y1="2197.682" y2="2191.189" gradientTransform="translate(0 -2154)" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#c26715"></stop>
+          <stop offset=".508" stop-color="#b85515"></stop>
+          <stop offset="1" stop-color="#ad3f16"></stop>
+        </linearGradient>
+      </defs>
+      <path fill="url(#grad)" d="M20.999,35h6v8a1,1,0,0,1-1,1h-4a1,1,0,0,1-1-1Z" />
+      <path fill="#107c42" d="M23.997,12.873,9.312,34.239A1.762,1.762,0,0,0,10.763,37H37.235a1.759,1.759,0,0,0,1.451-2.757Z" />
+      <path fill="#21a366" d="M23.999,7.839,13.286,24.301A1.746,1.746,0,0,0,14.751,27H33.247a1.748,1.748,0,0,0,1.465-2.703Z" />
+      <path fill="#33c481" d="M22.613,4.316l-5.374,9.11A1.705,1.705,0,0,0,18.707,16h10.582a1.709,1.709,0,0,0,1.472-2.575l-5.374-9.11A1.612,1.612,0,0,0,22.613,4.316Z" />
+    </svg>
+    <nav class="flex gap-6">
+      <a routerLink="/" class="text-gray-100 hover:text-primary transition flex items-center gap-1">
+        <i class="pi pi-home opacity-45"></i> Home
+      </a>
+      <a routerLink="/folders" class="text-gray-100 hover:text-primary transition flex items-center gap-1">
+        <i class="pi pi-list opacity-45"></i> Threads
+      </a>
+      <a routerLink="/public-items" class="text-gray-100 hover:text-primary transition flex items-center gap-1">
+        <i class="pi pi-objects-column opacity-45"></i> Public Items
+      </a>
+    </nav>
+  </div>
+
+  <div class="flex items-center gap-3">
+    @if(accountService.currentUser()){
+      <div class="flex items-center gap-2">
+        <p-button
+          label="{{accountService.currentUser() | name}}"
+          [matMenuTriggerFor]="menu"
+          variant="text">
+        </p-button>
+
+        <mat-menu #menu="matMenu">
+          <button routerLink="/profile" mat-menu-item>Profile</button>
+          <button routerLink="/account/search-user" mat-menu-item>All Users</button>
+          <button (click)="logout()" mat-menu-item>Logout</button>
+        </mat-menu>
+        <p-avatar
+          [image]="accountService.currentUser()?.profile?.url || 'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg'"
+          shape="circle">
+        </p-avatar>
+      </div>
+    } @else {
+      <div class="flex items-center gap-2">
+        <p-button icon="pi pi-user" routerLink="/account/login" label="Login"></p-button>
+        <p-button severity="secondary" icon="pi pi-user-plus" routerLink="/account/register" label="Register"></p-button>
+      </div>
+    }
+  </div>
+</header>
+
 @if(busyService.loading){
   <p-progressbar mode="indeterminate" [style]="{ height: '6px' }"></p-progressbar>
 }

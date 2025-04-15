@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { AccountService } from './account.service';
-import { Observable, of, tap } from 'rxjs';
+import {catchError, forkJoin, Observable, of, tap} from 'rxjs';
 import { User } from '../../shared/models/user';
 
 @Injectable({
@@ -10,7 +10,13 @@ export class InitService {
   private accountService = inject(AccountService);
 
   init() {
-    this.accountService.getUserInfo().subscribe();
-    return of(true);
+    return forkJoin({
+      user: this.accountService.getUserInfo()
+    }).pipe(
+      catchError(error => {
+        console.error('Eroare la inițializare:', error);
+        return of({ user: null });
+      })
+    );
   }
 }

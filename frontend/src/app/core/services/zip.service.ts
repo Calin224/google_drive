@@ -1,12 +1,13 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Zip} from '../../shared/models/zip';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ZipService {
-  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
+  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
   uploadZip(itemId: number, file: File){

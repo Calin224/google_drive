@@ -18,6 +18,7 @@ import {Toast} from 'primeng/toast';
 
 @Component({
   selector: 'app-update-profile',
+  standalone: true,
   imports: [
     Avatar,
     ButtonDirective,
@@ -61,29 +62,43 @@ export class UpdateProfileComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.user) {
-      this.router.navigateByUrl('/account/login')
+      this.router.navigateByUrl('/account/login');
+      return;
     }
 
     this.followService.getFollowing().subscribe({
       next: res => {
         this.following = res;
       }
-    })
+    });
 
     this.followService.getFollowers().subscribe({
       next: res => {
         this.followers = res;
       }
-    })
+    });
   }
 
   onSubmit() {
     if (this.profileForm.valid) {
       this.accountService.updateProfile(this.profileForm.value).subscribe({
         next: () => {
-          console.log('Profile updated successfully');
+          this.messageService.add({
+            severity: 'success',
+            summary: "Success!",
+            detail: "Profile updated successfully!",
+            key: 'br',
+            life: 3000
+          });
         },
         error: error => {
+          this.messageService.add({
+            severity: 'error',
+            summary: "Error!",
+            detail: "Failed to update profile",
+            key: 'br',
+            life: 3000
+          });
           console.error('Error updating profile:', error);
         }
       });
@@ -91,12 +106,62 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   onUploadImage(event: FileUploadHandlerEvent) {
-    const file: File = event.files[0];
+    if (!event.files || event.files.length === 0) {
+      this.messageService.add({
+        severity: 'error',
+        summary: "Error!",
+        detail: "No file selected",
+        key: 'br',
+        life: 3000
+      });
+      return;
+    }
+
+    const file = event.files[0];
+    console.log('Selected file:', file.name, 'size:', file.size, 'type:', file.type);
+
+    // Show loading toast
+    this.messageService.add({
+      severity: 'info',
+      summary: "Uploading...",
+      detail: "Please wait while we upload your image",
+      key: 'br',
+      life: 3000
+    });
+
     this.profileService.addProfilePicture(file).subscribe({
-      next: _ => {
-        this.accountService.getUserInfo();
-        this.messageService.add({severity: 'success', summary: "Success!", detail: "Profile picture updated successfully!", key: 'br', life: 3000});
+      next: (user) => {
+        console.log('Upload successful, received user:', user);
+
+        // Force a refresh of the component to show the new image
+        setTimeout(() => {
+          // Force the browser to re-download the image by adding a timestamp query param
+          const imgElement = document.querySelector('.p-avatar-image') as HTMLImageElement;
+          if (imgElement && imgElement.src) {
+            const timestamp = new Date().getTime();
+            const src = imgElement.src.split('?')[0]; // Remove any existing query params
+            imgElement.src = `${src}?t=${timestamp}`;
+          }
+        }, 500);
+
+        this.messageService.add({
+          severity: 'success',
+          summary: "Success!",
+          detail: "Profile picture updated successfully!",
+          key: 'br',
+          life: 3000
+        });
       },
-    })
+      error: (err) => {
+        console.error('Error uploading image:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: "Error!",
+          detail: "Failed to upload profile picture. Please try again.",
+          key: 'br',
+          life: 3000
+        });
+      }
+    });
   }
 }

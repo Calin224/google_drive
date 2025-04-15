@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {Item, Photo} from '../../shared/models/item';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoService {
-  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
+  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
   addPhotos(itemId: number, files: File[]) {

@@ -1,24 +1,40 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {tap} from 'rxjs';
+import {catchError, tap} from 'rxjs';
 import {AccountService} from './account.service';
 import {User} from '../../shared/models/user';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
   private accountService = inject(AccountService);
-  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
+  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
-  addProfilePicture(file: File){
+  addProfilePicture(file: File) {
+    console.log('Uploading file:', file.name, 'size:', file.size, 'type:', file.type);
+
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.post<User>(this.baseUrl + 'profile', formData).pipe(
+    console.log('FormData created');
+
+    return this.http.post<User>(
+      `${this.baseUrl}profile`,
+      formData,
+      { withCredentials: true }
+    ).pipe(
       tap(user => {
-        this.accountService.currentUser.set(user);
+        console.log('Profile update response:', user);
+        if (user) {
+          this.accountService.currentUser.set(user);
+        }
+      }),
+      catchError(error => {
+        console.error('Error uploading profile picture:', error);
+        throw error;
       })
     );
   }

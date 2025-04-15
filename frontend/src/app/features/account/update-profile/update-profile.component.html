@@ -27,7 +27,7 @@
 
       <p-drawer [(visible)]="visible" header="Update profile picture">
         <div class="flex items-center justify-center flex-col">
-          <p-avatar [image]="accountService.currentUser()?.profile?.url" class="mr-2" size="xlarge"
+          <p-avatar [image]="accountService.currentUser()?.profile?.url || 'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg'" class="mr-2" size="xlarge"
                     shape="circle" styleClass="mb-5 border-2 border-gray-600"></p-avatar>
 
           <div class="flex items-center justify-center">

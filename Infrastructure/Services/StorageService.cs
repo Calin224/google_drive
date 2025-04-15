@@ -13,7 +13,7 @@ public class StorageService : IStorageService
 
     public StorageService(IConfiguration config)
     {
-        _blobServiceClient = new BlobServiceClient(config["AzureBlobStorage:ConnectionString"]);
+        _blobServiceClient = new BlobServiceClient(config["MyConfig:X"]);
     }
     
     public async Task<string> UploadFileAsync(IFormFile file)

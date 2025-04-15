@@ -85,10 +85,11 @@ namespace API.Controllers
         public async Task<ActionResult> GetUserInfo()
         {
             if (User.Identity?.IsAuthenticated == false) return NoContent();
-            var user = await signInManager.UserManager.Users
-                .Include(x => x.Profile)
-                .Include(x => x.Folders)
-                .FirstOrDefaultAsync(x => x.Email == User.Identity!.Name);
+            // var user = await signInManager.UserManager.Users
+            //     .Include(x => x.Profile)
+            //     .Include(x => x.Folders)
+            //     .FirstOrDefaultAsync(x => x.Email == User.Identity!.Name);
+            var user = await signInManager.UserManager.GetUserByEmail(User);
 
             return Ok(new
             {

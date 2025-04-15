@@ -3,12 +3,13 @@ import {HubConnection, HubConnectionBuilder, HubConnectionState} from '@microsof
 import {ItemService} from './item.service';
 import {Item} from '../../shared/models/item';
 import {BehaviorSubject} from 'rxjs';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignalrService {
-  hubUrl = 'https://localhost:7207/hub/notifications/';
+  hubUrl = environment.hubUrl;
   hubConnection?: HubConnection;
   private itemSubject = new BehaviorSubject<Item | null>(null);
 

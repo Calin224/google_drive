@@ -14,20 +14,19 @@ import {Menu} from 'primeng/menu';
 import {BusyService} from '../../core/services/busy.service';
 import {ProgressBar} from 'primeng/progressbar';
 import {NamePipe} from '../../shared/pipes/name.pipe';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 
 @Component({
   selector: 'app-header',
   imports: [
-    Menubar,
-    PrimeTemplate,
     RouterLink,
-    Ripple,
-    NgClass,
-    Menu,
     ProgressBar,
     Avatar,
     NamePipe,
     Button,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

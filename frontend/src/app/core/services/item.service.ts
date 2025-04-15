@@ -6,12 +6,13 @@ import {Item} from '../../shared/models/item';
 import {AccountService} from './account.service';
 import {map, of, tap} from 'rxjs';
 import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemService {
-  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
+  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
   private accountService = inject(AccountService);
 

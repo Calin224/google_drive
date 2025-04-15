@@ -3,12 +3,13 @@ import { inject, Injectable } from '@angular/core';
 import { Folder } from '../../shared/models/folder';
 import {Pagination} from '../../shared/models/pagination';
 import {FolderParams} from '../../shared/models/folderParams';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FolderService {
-  baseUrl = 'https://googledriveapi.azurewebsites.net/api/';
+  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
   getFolders(folderParams: FolderParams) {
